@@ -136,13 +136,75 @@ Copia el código en tu bitácora.
 Coloca en enlace a tu sketch en p5.js en tu bitácora.
 Selecciona una captura de pantalla de tu sketch y colócala en tu bitácora.
 
-#### Respuesta:
-
-
-
 ## Bitácora de aplicación 
 
+#### Actividad 7:
+
+#### Enunciado:
+
+Reporta en tu bitácora lo siguiente:
+
+Un texto donde expliques el concepto de obra generativa.
+Copia el código en tu bitácora.
+Coloca en enlace a tu sketch en p5.js en tu bitácora.
+Selecciona una captura de pantalla de tu sketch y colócala en tu bitácora
+
+#### Respuesta:
+
+1. A través de un sistema autónomo, la pieza busca imitar el comportamiento de partículas naturales —como una mota de polvo en la luz o un organismo unicelular— que se desplazan sin un rumbo fijo, pero bajo leyes físicas invisibles.
+
+2. 
+```
+let x, y;
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  background(20);
+  // Iniciamos en el centro
+  x = width / 2;
+  y = height / 2;
+}
+
+function draw() {
+  // 1. DISTRIBUCIÓN UNIFORME
+  let r = random(255);
+  let g = random(255);
+  let b = random(255);
+  
+  // 2. DISTRIBUCIÓN NORMAL (GAUSSIANA)
+  let stepX = randomGaussian(0, 1);
+  let stepY = randomGaussian(0, 1);
+
+  // 3. RANDOM WALK
+  x += stepX; // Cambié a += para que sea un movimiento estándar
+  y += stepY;
+
+  // Dibujamos el rastro
+  noStroke();
+  fill(r, g, b, 150);
+  circle(x, y, 4);
+}
+
+// ESTA FUNCIÓN VA AFUERA DEL DRAW
+function mousePressed() {
+  // Limpia la pantalla volviendo a pintar el fondo
+  background(20);
+  
+  // Opcional: Reiniciar el caminante al centro al limpiar
+  x = width / 2;
+  y = height / 2;
+}
+```
+
+3.
+
+https://editor.p5js.org/truji2506/sketches/u3aOI2Gtz
+
+4.
+
+<img width="932" height="730" alt="image" src="https://github.com/user-attachments/assets/59d9c1a7-df24-413b-86f5-3589c28c2118" />
 
 
 ## Bitácora de reflexión
+
 
