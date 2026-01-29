@@ -219,6 +219,86 @@ https://editor.p5js.org/truji2506/sketches/u3aOI2Gtz
 
 ## Bitácora de reflexión
 
-
-
-
+#### Actividad 8
+```
+let x, y;
+```
+Variables que almacenan la posición actual
+```
+let prevX, prevY;
+```
+Dibujar lineas en lugar de puntos sueltos
+```
+createCanvas(windowWidth, windowHeight);
+```
+Valores automaticos para detectar el hancho y largo de la pantalla y asi tener las condiciones el lienzo 
+```
+background(10);
+```
+Color del fondo
+```
+x = width / 2;
+y = height / 2;
+```
+Posición inicial
+```
+prevX = x;
+prevY = y;
+```
+Esto evita una linea desde las coordenadas (0,0) hasta el centro en el primer milisegundo 
+```
+let stepSize;
+```
+Declaro una variable vacia, y en las siguientes lineas ya se le dará un valor
+```
+let r = random(1); 
+```
+Aqui se aplica la distribución uniforme, genera un numero decimal del 0 al 1 
+```
+if (r < 0.02) { 
+```
+Yo lo veo como muchos pasos y cada vez que un numero es menor a 0.02 dar un paso grande que solo pasa el 2% de las veces 
+```
+stepSize = random(50, 100); 
+```
+Y si entramos en este if se convierte en un paso grande de 50, a 100 pixeles
+```
+ stepSize = randomGaussian(2, 5);
+```
+Y ya el 98% del tiempo nos entramos en el else, donde la mayoria de pasos seran de 2 pixeles con una desviación estandar de 5 y esto genera un comulo de rayitas esperando a dar el paso grande 
+```
+let angle = random(TWO_PI);
+```
+El two_pi equivale a 360 grados, y al usar el random le digo a P5 que escoja entre 0 y 6.25 radianes
+```
+let nextX = x + cos(angle) * stepSize;
+```
+el cos siempre te dice cuando se mueve algo en el eje x y devuelve un valor de -1 y 1, en el stepsize multiplicamos ese valor por la longitud del paso y lo sumamos a la posición actual para obtener la posición del destino
+```
+let nextY = y + sin(angle) * stepSize;
+```
+Al igual que el cos pero se mueve en el Y
+```
+strokeWeight(2);
+```
+Define el grosor de la linea
+```
+stroke(random(100, 255), random(255), 255, 150);
+```
+Distribución uniforme, donde los colores son totalmente randoms junto con su alpha 
+```
+line(x, y, nextX, nextY);
+```
+Las coordenadas x,y son el punto de partida 
+los next, es el punto del destino, que son los que acabamos de calcular con el paso de levy 
+```
+  x = nextX;
+  y = nextY;
+```
+Como yo lo veo es como decirle olvida donde antes estabas y esta es tu nueva posición para el proximo frame
+```
+function mousePressed() {
+  background(10); // Limpiar con click
+  x = width / 2;
+  y = height / 2;
+```
