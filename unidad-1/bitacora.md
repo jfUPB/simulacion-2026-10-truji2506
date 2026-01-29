@@ -46,7 +46,7 @@ Modifica el código de la caminata aleatoria para que utilice una distribución 
 2. 
 Código modificado
 
-```
+```ruby
 let walker;
 
 function setup() {
@@ -98,7 +98,7 @@ Selecciona una captura de pantalla de tu sketch y colócala en tu bitácora.
 
 #### Respuesta:
 
-```
+```ruby
 let color;
 
 function setup() {
@@ -168,7 +168,7 @@ La función RandomGaussian() Fue aplicado para darle un poco mas de manejo a las
 La función Levy Fligh() fue aplicado para darle la probabilidad de dar un paso "Grande" en el walkdraw donde se le da el 2% de la posibilidad de pase y el 98% ingrese al randomgaussian().
 
 2. 
-```
+```ruby
 let x, y;
 let prevX, prevY;
 
@@ -342,7 +342,8 @@ Normal (Gaussiana): El uso de este concepto tiende a quedare mucho tiempo "Merod
 
 3. Creeria que el papel de la aleatoriedad en el arte generativo se basa mas que todo en la autonomia y sorpresa ademas de una variabilidad infinita, donde permite que la obra tome sus propias decisiones, logrando que el artista se sorprenda con resultados del código que no brinda el dibujo y la variabilidad infinita garantiza que la obra sea unica cada vez que se ejecuta
 
-4. 
+4. En mi obra use el concepto Levy Flight, donde busque imitar un comportamiento de exploración natural, donde no quise que el movimiento fuera monotono y los saltos largos de vez en cuando permiten que el lienzo no se saturara en un solo lugar, donde esto le dio 
+
 
 
 
