@@ -344,7 +344,10 @@ Normal (Gaussiana): El uso de este concepto tiende a quedare mucho tiempo "Merod
 
 4. En mi obra use el concepto Levy Flight, donde busque imitar un comportamiento de exploración natural, donde no quise que el movimiento fuera monotono y los saltos largos de vez en cuando permiten que el lienzo no se saturara en un solo lugar, donde esto le dio una estetica mucho mas dinamica y organica a la obra final.
 
-5. 
+5. Caminata (Walk): Es un proceso donde la posición actual depende de la anterior más un paso al azar
+
+Levy Flight: Su principal caracteristica es que no es propocional, mientras que una caminata normal da pasos de tamaño similar, el levy flight combina muchisimos pasos diminutos con saltos gigantescos de forma imprevista.
+
 
 
 
