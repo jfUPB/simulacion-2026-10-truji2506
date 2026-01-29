@@ -161,9 +161,9 @@ Random()
 RandomGaussian()
 Levy Flight()
 
-La funcion random() fue aplicado en la dirección del walkdraw, donde se calcula alguna posición 360 grados y por ender se utilizó el TWO_PI
+La funcion random() fue aplicado en la dirección de la obra, donde se calcula alguna posición 360 grados y por ender se utilizó el TWO_PI
 
-La función RandomGaussian() Fue aplicado para darle un poco mas de manejo a las decisiones que puede tomar el walkdraw, y no sea aleatorio
+La función RandomGaussian() Fue aplicado para darle un poco mas de manejo a las decisiones que puede tomar la obra, y no sea aleatorio
 
 La función Levy Fligh() fue aplicado para darle la probabilidad de dar un paso "Grande" en el walkdraw donde se le da el 2% de la posibilidad de pase y el 98% ingrese al randomgaussian().
 
@@ -342,7 +342,10 @@ Normal (Gaussiana): El uso de este concepto tiende a quedare mucho tiempo "Merod
 
 3. Creeria que el papel de la aleatoriedad en el arte generativo se basa mas que todo en la autonomia y sorpresa ademas de una variabilidad infinita, donde permite que la obra tome sus propias decisiones, logrando que el artista se sorprenda con resultados del código que no brinda el dibujo y la variabilidad infinita garantiza que la obra sea unica cada vez que se ejecuta
 
-4. En mi obra use el concepto Levy Flight, donde busque imitar un comportamiento de exploración natural, donde no quise que el movimiento fuera monotono y los saltos largos de vez en cuando permiten que el lienzo no se saturara en un solo lugar, donde esto le dio 
+4. En mi obra use el concepto Levy Flight, donde busque imitar un comportamiento de exploración natural, donde no quise que el movimiento fuera monotono y los saltos largos de vez en cuando permiten que el lienzo no se saturara en un solo lugar, donde esto le dio una estetica mucho mas dinamica y organica a la obra final.
+
+5. 
+
 
 
 
