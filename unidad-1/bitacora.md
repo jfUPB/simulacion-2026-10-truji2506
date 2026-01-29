@@ -153,6 +153,8 @@ Selecciona una captura de pantalla de tu sketch y colócala en tu bitácora
 
 1. A través de un sistema autónomo, la pieza busca imitar el comportamiento de partículas naturales como una mota de polvo en la luz o un organismo unicelular que se desplazan sin un rumbo fijo, pero bajo leyes físicas invisibles.
 
+La idea de esta obra generativa siempre te va a brindar una posibilidad de diseño para dibujar, teniendo en cuenta que siempre va a ser aleatorio puede imaginarte dependiendo de lo que te vaya mostrando imaginarte que puedas dibujar. 
+
 En esta obra de arte generativa aplique los siguientes conceptos,
 
 Random()
@@ -328,7 +330,20 @@ Piensa en tu obra final (Actividad 07). Describe uno de los conceptos de aleator
 
 1. La diferencia en el la función random () y el Ruido Perlin (noise()) 
 
-La función random() es totalmente aleatorio, donde el número que genera no tiene nada que ver con el anterior 
+La función random() es totalmente aleatorio, donde el número que genera no tiene nada que ver con el anterior y esto produce saltos bruscos
+
+A diferencia del random() el Ruido Perlin (Noise()) es mucho mas armonico y dependiente, todos los valores estan conectados creando una transición suave y fluida.
+
+2. La diferencia visual se basa en lo siguiente
+
+Uniforme: El caminante parece un robot confundido, este se mueve en todas las direcciones con la misma fuerza, llenando el espacio de forma muy cuadrada y dispersa.
+
+Normal (Gaussiana): El uso de este concepto tiende a quedare mucho tiempo "Merodeando" cerca de un punto central y rara vez se aleja mucho.
+
+3. Creeria que el papel de la aleatoriedad en el arte generativo se basa mas que todo en la autonomia y sorpresa ademas de una variabilidad infinita, donde permite que la obra tome sus propias decisiones, logrando que el artista se sorprenda con resultados del código que no brinda el dibujo y la variabilidad infinita garantiza que la obra sea unica cada vez que se ejecuta
+
+4. 
+
 
 
 
