@@ -156,41 +156,52 @@ Selecciona una captura de pantalla de tu sketch y colócala en tu bitácora
 2. 
 ```
 let x, y;
+let prevX, prevY;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  background(20);
-  // Iniciamos en el centro
+  background(10); // Fondo oscuro tipo "espacio"
   x = width / 2;
   y = height / 2;
+  prevX = x;
+  prevY = y;
 }
 
 function draw() {
-  // 1. DISTRIBUCIÓN UNIFORME
-  let r = random(255);
-  let g = random(255);
-  let b = random(255);
+  // 1. LÉVY FLIGHT (El concepto del salto)
+  // Usamos un número uniforme para decidir si damos un "gran salto"
+  let stepSize;
+  let r = random(1); 
   
-  // 2. DISTRIBUCIÓN NORMAL (GAUSSIANA)
-  let stepX = randomGaussian(0, 1);
-  let stepY = randomGaussian(0, 1);
+  if (r < 0.02) { 
+    // 2% de probabilidad de dar un paso gigante (Lévy Flight)
+    stepSize = random(50, 100); 
+  } else {
+    // 98% de probabilidad de dar un paso normal
+    // 2. DISTRIBUCIÓN NORMAL (Para pasos pequeños y orgánicos)
+    stepSize = randomGaussian(2, 5); 
+  }
 
-  // 3. RANDOM WALK
-  x += stepX; // Cambié a += para que sea un movimiento estándar
-  y += stepY;
+  // 3. RANDOM() (Para la dirección)
+  // Elegimos un ángulo aleatorio uniforme en 360 grados
+  let angle = random(TWO_PI);
+  
+  let nextX = x + cos(angle) * stepSize;
+  let nextY = y + sin(angle) * stepSize;
 
-  // Dibujamos el rastro
-  noStroke();
-  fill(r, g, b, 150);
-  circle(x, y, 4);
+  // Dibujamos la línea del camino
+  strokeWeight(2);
+  // Color aleatorio neón (Distribución uniforme)
+  stroke(random(100, 255), random(255), 255, 150); 
+  line(x, y, nextX, nextY);
+
+  // Actualizamos la posición actual
+  x = nextX;
+  y = nextY;
 }
 
-// ESTA FUNCIÓN VA AFUERA DEL DRAW
 function mousePressed() {
-  // Limpia la pantalla volviendo a pintar el fondo
-  background(20);
-  
-  // Opcional: Reiniciar el caminante al centro al limpiar
+  background(10); // Limpiar con click
   x = width / 2;
   y = height / 2;
 }
@@ -202,9 +213,12 @@ https://editor.p5js.org/truji2506/sketches/u3aOI2Gtz
 
 4.
 
-<img width="932" height="730" alt="image" src="https://github.com/user-attachments/assets/59d9c1a7-df24-413b-86f5-3589c28c2118" />
+<img width="916" height="779" alt="image" src="https://github.com/user-attachments/assets/013e971e-653d-4ca3-9870-4ea2c8dfdad1" />
+
 
 
 ## Bitácora de reflexión
+
+
 
 
