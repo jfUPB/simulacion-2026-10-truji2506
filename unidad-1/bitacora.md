@@ -151,7 +151,7 @@ Selecciona una captura de pantalla de tu sketch y colócala en tu bitácora
 
 #### Respuesta:
 
-1. A través de un sistema autónomo, la pieza busca imitar el comportamiento de partículas naturales —como una mota de polvo en la luz o un organismo unicelular— que se desplazan sin un rumbo fijo, pero bajo leyes físicas invisibles.
+1. A través de un sistema autónomo, la pieza busca imitar el comportamiento de partículas naturales<como una mota de polvo en la luz o un organismo unicelular que se desplazan sin un rumbo fijo, pero bajo leyes físicas invisibles.
 
 2. 
 ```
@@ -302,3 +302,4 @@ function mousePressed() {
   x = width / 2;
   y = height / 2;
 ```
+
