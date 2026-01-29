@@ -151,7 +151,19 @@ Selecciona una captura de pantalla de tu sketch y colócala en tu bitácora
 
 #### Respuesta:
 
-1. A través de un sistema autónomo, la pieza busca imitar el comportamiento de partículas naturales<como una mota de polvo en la luz o un organismo unicelular que se desplazan sin un rumbo fijo, pero bajo leyes físicas invisibles.
+1. A través de un sistema autónomo, la pieza busca imitar el comportamiento de partículas naturales como una mota de polvo en la luz o un organismo unicelular que se desplazan sin un rumbo fijo, pero bajo leyes físicas invisibles.
+
+En esta obra de arte generativa aplique los siguientes conceptos,
+
+Random()
+RandomGaussian()
+Levy Flight()
+
+La funcion random() fue aplicado en la dirección del walkdraw, donde se calcula alguna posición 360 grados y por ender se utilizó el TWO_PI
+
+La función RandomGaussian() Fue aplicado para darle un poco mas de manejo a las decisiones que puede tomar el walkdraw, y no sea aleatorio
+
+La función Levy Fligh() fue aplicado para darle la probabilidad de dar un paso "Grande" en el walkdraw donde se le da el 2% de la posibilidad de pase y el 98% ingrese al randomgaussian().
 
 2. 
 ```
@@ -302,4 +314,21 @@ function mousePressed() {
   x = width / 2;
   y = height / 2;
 ```
+#### Enunciado 
+
+En tu bitácora de aprendizaje. Responde con tus propias palabras a las siguientes preguntas.
+
+Describe la diferencia fundamental entre la aleatoriedad generada por random() y la apariencia de aleatoriedad del Ruido Perlin (noise()). ¿En qué tipo de situación usarías cada una?
+Explica con tus palabras qué es una distribución de probabilidad. ¿Qué diferencia visual produce una caminata aleatoria con una distribución uniforme versus una con una distribución normal?
+¿Cuál es el papel de la aleatoriedad en el arte generativo? Menciona al menos dos funciones distintas que cumple
+Piensa en tu obra final (Actividad 07). Describe uno de los conceptos de aleatoriedad que usaste y explica por qué fue una elección adecuada para lograr el efecto que buscabas.
+¿Qué es un “paseo” o “caminata” (walk) en el contexto de la simulación? ¿Qué característica particular tiene una caminata de tipo “Lévy flight”?
+
+#### Respuesta
+
+1. La diferencia en el la función random () y el Ruido Perlin (noise()) 
+
+La función random() es totalmente aleatorio, donde el número que genera no tiene nada que ver con el anterior 
+
+
 
