@@ -229,6 +229,15 @@ Cuál es el concepto del marco motion 101 y cómo se interpreta geométricamente
 
 #### Solución
 
+1. El concepto de motion 101 empieza a tener logica cuando queremos calcular movimiento sin necesidad de que sea preciso, se entiendo como posición inicial y posición futura, con velocidad delta de t y esto puede calcular usando la velocidad y para encontrar la aceleración delta de t
+2. En el ejemplo 1.8 de la documentación
+   
+```ruby
+    this.velocity.add(this.acceleration);
+    this.velocity.limit(this.topSpeed);
+    this.position.add(this.velocity);
+```
+
 #### Actividad 8
 
 #### Enunciado
@@ -244,6 +253,7 @@ Cuál es el concepto del marco motion 101 y cómo se interpreta geométricamente
 
 
 ## Bitácora de reflexión
+
 
 
 
