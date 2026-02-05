@@ -39,7 +39,7 @@ Escribe el código que utilizaste para resolver el ejercicio.
 
 1. Se modifico un codigo de la unidad 1 añadiendole vectores
 
-```
+```ruby
 // The Nature of Code
 // Walker con p5.Vector (Estructura original)
 
@@ -89,7 +89,30 @@ class Walker {
 
 #### Enunciado
 
+¿Qué resultado esperas obtener en el programa anterior?
+¿Qué resultado obtuviste?
+Recuerda los conceptos de paso por valor y paso por referencia en programación.
+¿Qué tipo de paso se está realizando en el código?
+¿Qué aprendiste?
+
 #### Solución
+
+1. Esperaba obtener que en el primer console.log muestre el vector original (6,9) y que el segundo mostrala lo mismo, asumiento que el función playingVector trabaja con una copia local y que no afectaba la variable global
+2. El resultado que obtuve
+
+<img width="319" height="70" alt="image" src="https://github.com/user-attachments/assets/edfe8e68-1a8c-464d-9a97-e1926edc703e" />
+
+El valor de la variable original cambio
+
+3. Se está realizando un paso por referencia
+
+   Paso por valor y paso por referencia
+
+   En el codigo le estoy dando la apertura de la caja donde esta guardado el vector, entonces cuando la funcion modifica v.x y v.y esta alterando el contenido de la caja original.
+
+4. Aprendi que los vectores son objetos. que tengo que tener cuidado cuando los vectores reciben un parametro y este lo altera permanentemente al vector original.
+
+
 
 #### Actividad 5
 
@@ -119,4 +142,5 @@ class Walker {
 
 
 ## Bitácora de reflexión
+
 
