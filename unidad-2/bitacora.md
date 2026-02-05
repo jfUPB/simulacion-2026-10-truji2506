@@ -224,18 +224,27 @@ push() y pop(): Aseguran que estas traslaciones y rotaciones no afecten a los de
 
 #### Enunciado
 
+Cuál es el concepto del marco motion 101 y cómo se interpreta geométricamente.
+¿Cómo se aplica motion 101 en el ejemplo?
+
 #### Solución
 
 #### Actividad 8
 
 #### Enunciado
 
+¿Qué observaste cuando usas cada una de las aceleraciones propuestas?
+
 #### Solución
+
+
+
 ## Bitácora de aplicación 
 
 
 
 ## Bitácora de reflexión
+
 
 
 
