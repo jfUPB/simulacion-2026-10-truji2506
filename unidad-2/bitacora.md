@@ -244,7 +244,13 @@ Cuál es el concepto del marco motion 101 y cómo se interpreta geométricamente
 
 ¿Qué observaste cuando usas cada una de las aceleraciones propuestas?
 
+1. Acelerción contante
+2. Aceleración aleatoria
+3. Aceleración hacia el mouse
+
 #### Solución
+
+1.
 
 
 
@@ -253,6 +259,7 @@ Cuál es el concepto del marco motion 101 y cómo se interpreta geométricamente
 
 
 ## Bitácora de reflexión
+
 
 
 
