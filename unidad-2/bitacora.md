@@ -32,7 +32,58 @@ Ya que con un codigo simple se realizó una obra muy llamativa e interactiva
 
 #### Enunciado
 
+¿Qué tuviste que hacer para hacer la conversión propuesta?
+Escribe el código que utilizaste para resolver el ejercicio.
+
 #### Solución
+
+1. Se modifico un codigo de la unidad 1 añadiendole vectores
+
+```
+// The Nature of Code
+// Walker con p5.Vector (Estructura original)
+
+let walker;
+
+function setup() {
+  createCanvas(640, 240);
+  walker = new Walker();
+  background(255);
+}
+
+function draw() {
+  walker.step();
+  walker.show();
+}
+
+class Walker {
+  constructor() {
+    // Sustituimos this.x y this.y por un solo vector
+    this.pos = createVector(width / 2, height / 2);
+  }
+
+  show() {
+    stroke(0);
+    // Accedemos a los componentes mediante el punto
+    point(this.pos.x, this.pos.y);
+  }
+
+  step() {
+    const choice = floor(random(4));
+    
+    // Aplicamos los cambios directamente a las propiedades x o y del vector
+    if (choice == 0) {
+      this.pos.x++;
+    } else if (choice == 1) {
+      this.pos.x--;
+    } else if (choice == 2) {
+      this.pos.y++;
+    } else {
+      this.pos.y--;
+    }
+  }
+}
+```
 
 #### Actividad 4
 
@@ -68,3 +119,4 @@ Ya que con un codigo simple se realizó una obra muy llamativa e interactiva
 
 
 ## Bitácora de reflexión
+
