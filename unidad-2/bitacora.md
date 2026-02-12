@@ -257,11 +257,46 @@ Cuál es el concepto del marco motion 101 y cómo se interpreta geométricamente
 
 ## Bitácora de aplicación 
 
+#### Actividad 9
 
+#### Enunciado
+
+Describe el concepto de tu obra generativa. Explica el concepto de tu obra generativa, qué regla aplicaste para la aceleración y por qué, si fue una decisión de diseño, o qué te evoca, si fue una exploración artística.
+El código de la aplicación.
+Un enlace al proyecto en el editor de p5.js.
+Selecciona capturas de pantalla representativas de tu pieza de arte generativa.
+
+#### Solución
+
+#### 1. Concepto:
+La obra visualiza un sistema de particulas que simula un enjambre. las partículas actuan como organismos microscópicos que fluyen en una corriente invisible.
+
+#### 2. Reglas aplicadadas para la aceleracion
+
+#### Ruido de Perlin: 
+Cada partícula calcula su aceleración basándose en noise(). Esto crea un movimiento orgánico, fluido y suave, como si estuvieran flotando en agua o viento. Evocación: La naturaleza y la calma.
+
+#### Aceleración de Interacción (Mouse):
+
+#### Si no presionas nada: 
+
+Las partículas sienten curiosidad y tienen una aceleración leve hacia el mouse.
+
+#### Si presionas clic: 
+
+La aceleración se invierte violentamente, simulando un barrera o una explosión de energia.
+
+#### Aceleración de Fricción: 
+
+Una regla de aceleración negativa proporcional a la velocidad actual. Esto evita que las partículas ganen velocidad infinita y hace que el movimiento se sienta "viscoso".
 
 ## Bitácora de reflexión
 
+#### Actividad 10
 
+#### Enunciado
+
+#### Solución
 
 
 
