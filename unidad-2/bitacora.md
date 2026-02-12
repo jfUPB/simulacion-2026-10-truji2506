@@ -414,11 +414,209 @@ https://editor.p5js.org/truji2506/sketches/t_0AAOT4W
 
 ## Bitácora de reflexión
 
+#### Explicación codigo de la unidad 9 
+
+Lo voy a dividir por fases para que sea un poco mas claro 
+
+#### Fase 1 
+
+```ruby
+let particles = [];
+const NUM_PARTICLES = 300;
+```
+1. En let particles = []; Creamoos una lista vacia, aqui guardaremos a cada uno de nuestras particulas
+2. const NUM_PARTICLES = 300; Una constante para definir cuantas particulas queremos.
+   
+```ruby
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  for (let i = 0; i < NUM_PARTICLES; i++) {
+    particles.push(new Particle());
+  }
+  background(10); 
+}
+```
+
+1. createCanvas(windowWidth, windowHeight); Crea el lienzo del tamaño total de la ventana,  pero lo cambie para que tuviera un tamaño constante
+2. for (let i = 0; i < NUM_PARTICLES; i++) Es un bucle que se repite 300 veces
+3. particles.push(new Particle()); En cada vuelta del bucle, crea una instancia de la clase donde nace una nueva particula y la mete push dentro de la lista particulas
+4.  background(10); Esto lo que hace es pintar de color gris muy oscuro una sola vez al princpio
+
+#### Fase 2
+
+```ruby
+function draw() {
+  background(10, 20);
+```
+Lo que hace el 10 es poner el fondo gris oscuro 
+
+y lo que hace el 20 es darle como una transparencia para que pinte en una capa semi transparente
+
+```ruby
+let mouse = createVector(mouseX, mouseY);
+```
+
+Esta es la creación de un vector que representa la ubicación actual del puntero del mouse, ya mas adelanto con esto ayudara a calcular distancias y direcciones.
+
+```ruby
+for (let p of particles) {
+```
+Esto lo que ayuda es preparar a la particula dentro de la lista de particula ya que le vamos a dar instrucciones a cada una 
+
+```ruby
+let angle = noise(p.pos.x * 0.005, p.pos.y * 0.005, frameCount * 0.001) * TWO_PI * 4;
+```
+
+1. El noise nos ayuda a generar un numero en el 0 y 1
+2. Uso p.pos.x y p.pos.y para que el ruido dependa de donde este la particula
+3. Uso FrameCount para que el ruido cambie con el tiempo
+4. TWO_PI * 4 Convetimos ese 0 - 1 en un angulo de rotación de 0 a 720 grados
+
+```ruby
+let flowForce = p5.Vector.fromAngle(angle);
+    flowForce.mult(0.5); 
+    p.applyForce(flowForce);
+```
+
+1. fromAngle(angle) Cree un vector pequeño que apunta en la dirección de ese angulo
+2. mult(0.5) Reduce la fuerza a la mitad para que el viento sea suave
+3. p.applyForce(...) Y ya empujamos la particula con ese viento suave
+
+```ruby
+let mouseForce = p5.Vector.sub(mouse, p.pos);
+    let d = mouseForce.mag();
+```
+
+1. sub(mouse, p.pos) Esto lo que hace es restar los vectores de destino y de origen, y crea como una flecha que va desde la particula hasta el mouse
+2. mag() Calcula la longuitud de esta flecha que seria la distancia en pixeles
+
+```ruby
+if (d < 300) { 
+      mouseForce.normalize();
+```
+
+1. if (d < 300) Calcula la fisica si el mouse esta cerca
+2. normalize() Lo que hace es convertir la distancia y en un vector de longitud
+
+```ruby
+if (mouseIsPressed) {
+        mouseForce.mult(-10); 
+      } else {
+        mouseForce.mult(0.5); 
+      }
+```
+
+1. mouseIsPressed Aca ponemos un if anidado donde si es verdadero osea dando un click multiplicado por -10, y lo que hace es invertir la dirección de repulcion de una forma brusca
+2. Si es falso osea que no se oprime lo multiplicamos por 0.5 y se hace una atracción suave
+
+```ruby
+mouseForce.mult(map(d, 0, 300, 3, 0));
+      p.applyForce(mouseForce);
+    }
+```
+1. map(...) Hace que la fuerza sea variable. si esta muy cerca osea 0 es multiplicado por 3 y si esta lejos osea 300 es multiplcado por 0
+2. applyForce Aqui es donde aplicamos esa segunda fuerza a la particula y ya tendria dos fuerzas el viento y el mouse
+
+```ruby
+p.update();
+    p.checkEdges();
+    p.show();
+  }
+}
+```
+1. Aqui es donde llamamos las funciones internas de la particula para que actualice sus calculos y se dibuje
+
+#### Fase 3
+
+```ruby
+constructor() {
+    this.pos = createVector(random(width), random(height));
+    this.vel = createVector(0, 0);
+    this.acc = createVector(0, 0);
+    this.maxSpeed = 6;
+    this.color = color(random(100, 255), random(50, 200), 255);
+  }
+```
+
+1. this.pos = createVector(random(width), random(height)); La particula nace en cualquier lugar el lienzo
+2. this.vel = createVector(0, 0); Como se mueve la principio esta quieta
+3. this.acc = createVector(0, 0); Aqui es donde se debe de sentir fuerza y por ahora ninguna
+4. this.maxSpeed = 6; se pone un limite de velocidad para que no se mueve muy abruptamente
+5. this.color = color(random(100, 255), random(50, 200), 255); aqui donde le doy colocar a la particula
+
+El concepto es que this osea yo (Cada particula) y cada una de ellas tienen su propia pos, su propia velocidad y su propia acceleración.
+
+```ruby
+applyForce(force) {
+  // Segunda Ley de Newton: Fuerza = Masa * Aceleración
+  // Aquí asumimos que Masa = 1, así que Fuerza = Aceleración.
+  this.acc.add(force);
+}
+```
+
+1. se utliza add ya que suma y no iguala
+2. Asi pueden actual varias fuerzas al mismo tiempo, al usar add acumulamos todas la fuerzas que influyen en la particula
+
+```ruby
+update() {
+  // PASO A: La aceleración cambia la velocidad
+  this.vel.add(this.acc);
+  
+  // PASO B: Frenamos un poco si va demasiado rápido
+  this.vel.limit(this.maxSpeed);
+  
+  // PASO C: La velocidad cambia la posición (Moverse)
+  this.pos.add(this.vel);
+  
+  // PASO D: ¡EL RESETEO IMPORTANTE!
+  this.acc.mult(0); 
+}
+```
+
+1. this.vel.add(this.acc); La aceleración cambia la velocidad
+2. this.vel.limit(this.maxSpeed); Frena un poco si va muy raido
+3. this.pos.add(this.vel); La velocidad cambia la posición
+4. this.acc.mult(0); aqui lo que hacemos es resetear la fuerza de ese momento, para ver que fuerzas llegan en el instante
+
+```ruby
+show() {
+  noStroke(); // Sin bordes negros
+  fill(this.color); // Usamos su color personal
+  
+  // Mapeo dinámico:
+  // Si la velocidad es 0, el radio es 2 (puntito pequeño).
+  // Si la velocidad es 6 (maxSpeed), el radio es 6 (punto grande).
+  let r = map(this.vel.mag(), 0, this.maxSpeed, 2, 6);
+  
+  circle(this.pos.x, this.pos.y, r);
+}
+```
+1.  noStroke(); sin bordes negros
+2.   fill(this.color); Uso del color que quiera
+3.   let r = map(this.vel.mag(), 0, this.maxSpeed, 2, 6); Aqui es el mapeo dinamico, si la velocidad es 0 el radio es 2 osea que particula es mas pequeña, si la velocidad 6 el radio es 6 y la particula se hace mas grande.
+
+```ruby
+ checkEdges() {
+  // Si se pasa del borde derecho (width), aparece en la izquierda (0)
+  if (this.pos.x > width) this.pos.x = 0;
+  
+  // Si se pasa del borde izquierdo (0), aparece en la derecha (width)
+  if (this.pos.x < 0) this.pos.x = width;
+  
+  // Lo mismo para arriba y abajo...
+  if (this.pos.y > height) this.pos.y = 0;
+  if (this.pos.y < 0) this.pos.y = height;
+}
+```
+1. if (this.pos.x > width) this.pos.x = 0; en el checkEdges lo que hace es que si la particula pasa por alguno de los extremos pasa al otro lado derecha a izquiera y de izquierda a derecha y lo mismo de arriba para abajo y de abajo para arriba.
+
+
 #### Actividad 10
 
 #### Enunciado
 
 #### Solución
+
 
 
 
