@@ -615,7 +615,171 @@ show() {
 
 #### Enunciado
 
+Describe el concepto de tu obra generativa. Explica el concepto de tu obra generativa.
+El código de la aplicación.
+Un enlace al proyecto en el editor de p5.js.
+Selecciona capturas de pantalla representativas de tu pieza de arte generativa.
+
 #### Solución
+
+#### Concpeto y explicación de la obra generativa
+
+De Motion 101 (Shiffman): Utilizo estrictamente el motor de física Aceleración -> Velocidad -> Posición. Las partículas no se teletransportan; tienen inercia y masa.
+
+De Jeffrey Ventrella: Implementé una matriz de afinidad asimétrica:
+
+Los Rojos persiguen a los Verdes.
+
+Los Verdes persiguen a los Azules.
+
+Los Azules persiguen a los Rojos.
+Esto crea un ciclo infinito de persecución (como el juego piedra, papel o tijera), generando espirales y clústeres dinámicos.
+
+De Jared Tarbell: Visualmente, decidí no limpiar el fondo completamente en cada fotograma (background(0, 10)). Esto deja un rastro fantasmal que revela la historia del movimiento y las órbitas, creando texturas "arenosas" y orgánicas en lugar de simples puntos moviéndose.
+
+#### Codigo de la obra
+
+```ruby
+// Actividad 10: "Cromatodinámica Social"
+// Inspirado en: Motion 101 (Shiffman) + Clusters (Ventrella) + Trazos (Tarbell)
+
+let particles = [];
+const NUM_PARTICLES = 150;
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  // Creamos partículas con 3 tipos distintos (0, 1, 2)
+  for (let i = 0; i < NUM_PARTICLES; i++) {
+    particles.push(new Particle(random(width), random(height), floor(random(3))));
+  }
+  background(0);
+}
+
+function draw() {
+  // Estética Tarbell: Fondo con transparencia para dejar rastro
+  noStroke();
+  fill(0, 15); 
+  rect(0, 0, width, height);
+
+  // Doble bucle: Todas las partículas interactúan con todas
+  for (let i = 0; i < particles.length; i++) {
+    let p1 = particles[i];
+    
+    // Calcular fuerzas basadas en las otras partículas
+    // (Optimizamos calculando solo vecinos cercanos si fueran muchos, 
+    // pero con 150 podemos hacerlo todos contra todos)
+    for (let j = 0; j < particles.length; j++) {
+      if (i !== j) {
+        let p2 = particles[j];
+        p1.interact(p2);
+      }
+    }
+    
+    p1.update();
+    p1.checkEdges();
+    p1.show();
+  }
+}
+
+class Particle {
+  constructor(x, y, type) {
+    this.pos = createVector(x, y);
+    this.vel = createVector(0, 0); // Empiezan quietas
+    this.acc = createVector(0, 0);
+    this.type = type; // 0: Rojo, 1: Verde, 2: Azul
+    this.maxSpeed = 3;
+    this.maxForce = 0.2;
+    
+    // Asignar color según el tipo
+    if (this.type == 0) this.col = color(255, 50, 50); // Rojo
+    else if (this.type == 1) this.col = color(50, 255, 50); // Verde
+    else this.col = color(50, 50, 255); // Azul
+  }
+
+  // El núcleo de Ventrella: Reglas de atracción/repulsión
+  interact(other) {
+    let force = p5.Vector.sub(other.pos, this.pos);
+    let d = force.mag();
+    
+    // Solo interactúan si están relativamente cerca (visión local)
+    // y no demasiado cerca (para evitar colapsar en un punto infinito)
+    if (d > 0 && d < 200) {
+      force.normalize();
+      
+      let strength = 0;
+
+      // REGLAS DE "VIDA ARTIFICIAL":
+      // Si soy Rojo (0)...
+      if (this.type === 0) {
+        if (other.type === 0) strength = 0.5;   // Me agrupo con Rojos
+        if (other.type === 1) strength = 1.0;   // Persigo Verdes (Fuerte)
+        if (other.type === 2) strength = -1.0;  // Huyo de Azules
+      }
+      // Si soy Verde (1)...
+      else if (this.type === 1) {
+        if (other.type === 1) strength = 0.5;   // Me agrupo con Verdes
+        if (other.type === 2) strength = 1.0;   // Persigo Azules (Fuerte)
+        if (other.type === 0) strength = -1.0;  // Huyo de Rojos
+      }
+      // Si soy Azul (2)...
+      else if (this.type === 2) {
+        if (other.type === 2) strength = 0.5;   // Me agrupo con Azules
+        if (other.type === 0) strength = 1.0;   // Persigo Rojos (Fuerte)
+        if (other.type === 1) strength = -1.0;  // Huyo de Verdes
+      }
+
+      // Aplicamos la magnitud calculada a la fuerza
+      force.mult(strength);
+      
+      // Aplicamos la fuerza a la aceleración (Motion 101)
+      this.applyForce(force);
+    }
+  }
+
+  applyForce(force) {
+    this.acc.add(force);
+  }
+
+  update() {
+    // Algoritmo clásico Motion 101
+    this.vel.add(this.acc);
+    this.vel.limit(this.maxSpeed);
+    this.pos.add(this.vel);
+    this.acc.mult(0); // Limpiar aceleración
+  }
+
+  show() {
+    noStroke();
+    // Dibujamos con un poco de transparencia para el efecto de estela
+    fill(red(this.col), green(this.col), blue(this.col), 200);
+    circle(this.pos.x, this.pos.y, 6);
+  }
+
+  checkEdges() {
+    // Espacio toroidal (Pac-Man) para continuidad
+    if (this.pos.x > width) this.pos.x = 0;
+    else if (this.pos.x < 0) this.pos.x = width;
+    if (this.pos.y > height) this.pos.y = 0;
+    else if (this.pos.y < 0) this.pos.y = height;
+  }
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  background(0);
+}
+```
+
+#### Enlace
+
+https://editor.p5js.org/truji2506/sketches/t_0AAOT4W
+
+#### Captura de pantalla
+
+<img width="917" height="678" alt="image" src="https://github.com/user-attachments/assets/fcb269d1-4562-4021-8844-9d9c4adecbc3" />
+
+
+
 
 
 
