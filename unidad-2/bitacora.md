@@ -250,9 +250,9 @@ Cuál es el concepto del marco motion 101 y cómo se interpreta geométricamente
 
 #### Solución
 
-1. Se interactuo con el concepto de aceleración constante, cambiandole varios parametros para lo hicista de forma horizontal, con un circulo un poco mas pequeño y su velocidad.
-2. 
-
+1. Se interactuo con el concepto de aceleración constante, cambiandole varios parametros para lo hicista de forma horizontal, con un circulo un poco mas pequeño y su velocidad. (Representa fuerzas constantes de la naturaleza, como la gravedad (si es hacia abajo) o el viento)
+2. La velocidad cambia caóticamente porque la fuerza que la empuja cambia de dirección en cada fotograma (60 veces por segundo).
+3. Aquí vemos la diferencia entre cambiar la posición (teletransportarse al mouse) y cambiar la aceleración (ser empujado hacia el mouse).
 
 
 ## Bitácora de aplicación 
@@ -260,6 +260,7 @@ Cuál es el concepto del marco motion 101 y cómo se interpreta geométricamente
 
 
 ## Bitácora de reflexión
+
 
 
 
