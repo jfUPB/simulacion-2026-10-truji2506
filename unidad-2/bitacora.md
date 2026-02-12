@@ -274,7 +274,7 @@ La obra visualiza un sistema de particulas que simula un enjambre. las partícul
 #### 2. Reglas aplicadadas para la aceleracion
 
 #### Ruido de Perlin: 
-Cada partícula calcula su aceleración basándose en noise(). Esto crea un movimiento orgánico, fluido y suave, como si estuvieran flotando en agua o viento. Evocación: La naturaleza y la calma.
+Cada partícula calcula su aceleración basandose en noise(). Esto crea un movimiento organico, fluido y suave, como si estuvieran flotando en agua o viento. Como La naturaleza y la calma.
 
 #### Aceleración de Interacción (Mouse):
 
@@ -290,6 +290,128 @@ La aceleración se invierte violentamente, simulando un barrera o una explosión
 
 Una regla de aceleración negativa proporcional a la velocidad actual. Esto evita que las partículas ganen velocidad infinita y hace que el movimiento se sienta "viscoso".
 
+#### ¿Por qué estas reglas?
+
+Queria explorar la tension entre el orden natural y la intervención caótica. La aceleración no es constante, sino que es un mapa cambiante que depende de la posición en el espacio y la presencia del observador siendo el observador el mouse.
+
+#### Codigo
+
+```ruby
+let particles = [];
+const NUM_PARTICLES = 300; // Cantidad de partículas
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  // Inicializamos el enjambre
+  for (let i = 0; i < NUM_PARTICLES; i++) {
+    particles.push(new Particle());
+  }
+  background(10);
+}
+
+function draw() {
+  // Un fondo semitransparente crea el efecto de "rastro" o estela
+  background(10, 20); 
+
+  // Vector del mouse
+  let mouse = createVector(mouseX, mouseY);
+
+  for (let p of particles) {
+    // --- REGLA 1: Aceleración por Ruido (Flujo natural) ---
+    // Usamos la posición de la partícula para obtener un valor de ruido
+    // Esto crea un "campo de flujo" invisible
+    let angle = noise(p.pos.x * 0.005, p.pos.y * 0.005, frameCount * 0.001) * TWO_PI * 4;
+    let flowForce = p5.Vector.fromAngle(angle);
+    flowForce.mult(0.5); // Ajustar la fuerza del flujo
+    p.applyForce(flowForce);
+
+    // --- REGLA 2: Aceleración por Interacción (Mouse) ---
+    let mouseForce = p5.Vector.sub(mouse, p.pos);
+    let d = mouseForce.mag();
+    
+    if (d < 300) { // Solo afecta si el mouse está cerca
+      mouseForce.normalize();
+      
+      if (mouseIsPressed) {
+        // Si clic: REPULSIÓN FUERTE (Explosión)
+        mouseForce.mult(-10); 
+      } else {
+        // Sin clic: ATRACCIÓN SUAVE (Curiosidad)
+        mouseForce.mult(0.5); 
+      }
+      
+      // Mapeamos la fuerza para que sea más fuerte cuanto más cerca
+      // (Rompiendo un poco la física real para efecto artístico)
+      mouseForce.mult(map(d, 0, 300, 3, 0));
+      p.applyForce(mouseForce);
+    }
+
+    // --- MOTION 101 ---
+    p.update();
+    p.checkEdges();
+    p.show();
+  }
+}
+
+class Particle {
+  constructor() {
+    this.pos = createVector(random(width), random(height));
+    this.vel = createVector(0, 0);
+    this.acc = createVector(0, 0);
+    this.maxSpeed = 6;
+    // Color aleatorio entre azules y púrpuras
+    this.color = color(random(100, 255), random(50, 200), 255);
+  }
+
+  applyForce(force) {
+    // F = A (asumiendo masa = 1)
+    this.acc.add(force);
+  }
+
+  update() {
+    // Algoritmo Motion 101
+    this.vel.add(this.acc);
+    this.vel.limit(this.maxSpeed);
+    this.pos.add(this.vel);
+    
+    // Importante: Limpiamos la aceleración para el siguiente frame
+    this.acc.mult(0); 
+  }
+
+  show() {
+    noStroke();
+    fill(this.color);
+    // El tamaño cambia según la velocidad (más rápido = más estirado/grande)
+    let r = map(this.vel.mag(), 0, this.maxSpeed, 2, 6);
+    circle(this.pos.x, this.pos.y, r);
+  }
+
+  checkEdges() {
+    // Si salen por un lado, entran por el otro (universo toroidal)
+    if (this.pos.x > width) this.pos.x = 0;
+    if (this.pos.x < 0) this.pos.x = width;
+    if (this.pos.y > height) this.pos.y = 0;
+    if (this.pos.y < 0) this.pos.y = height;
+  }
+}
+
+// Ajustar canvas si se cambia el tamaño de ventana
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  background(10);
+}
+```
+
+#### Enlace
+
+https://editor.p5js.org/truji2506/sketches/t_0AAOT4W
+
+#### Capturas
+
+<img width="915" height="773" alt="image" src="https://github.com/user-attachments/assets/f5d59506-a2fc-40be-a548-b51f24e53790" />
+
+<img width="912" height="774" alt="image" src="https://github.com/user-attachments/assets/7d21b7d0-882c-41b7-a51d-868822b1b1d1" />
+
 ## Bitácora de reflexión
 
 #### Actividad 10
@@ -297,6 +419,7 @@ Una regla de aceleración negativa proporcional a la velocidad actual. Esto evit
 #### Enunciado
 
 #### Solución
+
 
 
 
