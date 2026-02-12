@@ -297,7 +297,7 @@ Queria explorar la tension entre el orden natural y la intervención caótica. L
 #### Codigo
 
 ```ruby
-let particles = [];
+[let particles = [];
 const NUM_PARTICLES = 300; // Cantidad de partículas
 
 function setup() {
@@ -399,7 +399,7 @@ class Particle {
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
   background(10);
-}
+}](https://editor.p5js.org/truji2506/sketches/t_0AAOT4W)
 ```
 
 #### Enlace
@@ -616,6 +616,7 @@ show() {
 #### Enunciado
 
 #### Solución
+
 
 
 
