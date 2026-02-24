@@ -21,6 +21,8 @@ Reporta en tu bitácora tus reflexiones sobre lo que acabas de aprender.
 
 #### Solución 
 
+En esta actividad me di cuenta de que programar movimiento es literalmente imitar la vida real. Me pareció muy curioso el detalle de tener que multiplicar la aceleración por cero al final de cada frame. Al principio no le veía el sentido, pero luego lo entendí: la aceleración es como dar un empujón. Si no "reseteas" ese empujón constantemente, el objeto acumularía la fuerza y saldría volando sin control, como si le dejaras el acelerador metido a fondo a una moto sin soltarlo nunca.
+
 #### Acividad 3
 
 #### Enunciado
@@ -42,4 +44,5 @@ Atracción gravitacional.
 
 
 ## Bitácora de reflexión
+
 
