@@ -207,8 +207,166 @@ Selecciona capturas de pantalla representativas de tu pieza de arte generativa.
 
 #### Solución 
 
+Mi concepto de arte generativa se basa en el movimiento con fuerzas "Naturales" y "Sobrenaturales" de unas runas nordicas con moviento natural y al momento de realizar la interacción con dichas runas, se aplicar una fuerza "Sobrenatural" que la fijo como la fricción donde cada click puede escribir algo en nordico y darle un significado.
+
+#### Elaboración del código en proceso 
+
+```c
+let runas = [];
+let atractor;
+let arbolBuffer; // Lienzo extra para dibujar a Yggdrasil una sola vez
+const caracteresRunas = "ᚠᚢᚦᚬᚱᚴᚼᚽᚾᛅᛋᛏᛒᛘᛚᛦ"; 
+
+function setup() {
+  createCanvas(800, 600);
+  
+  // 1. Crear a Yggdrasil en un buffer de gráficos para no perder rendimiento
+  arbolBuffer = createGraphics(800, 600);
+  generarYggdrasil(arbolBuffer);
+  
+  // 2. Posicionamos el núcleo gravitacional justo en el tronco del árbol
+  atractor = new Atractor(width / 2, height / 2, 25);
+  
+  // 3. Generamos las runas flotantes
+  for (let i = 0; i < 80; i++) {
+    let x = random(width);
+    let y = random(height);
+    let m = random(1, 3);
+    runas.push(new Runa(x, y, m));
+  }
+}
+
+function draw() {
+  // Fondo oscuro con ligera transparencia para la estela de las runas
+  background(10, 15, 25, 80);
+
+  // Dibujamos el árbol Yggdrasil estático en el fondo
+  image(arbolBuffer, 0, 0);
+
+  for (let runa of runas) {
+    // 1. Gravedad hacia el centro del árbol
+    let fuerzaGravedad = atractor.atraer(runa);
+    runa.aplicarFuerza(fuerzaGravedad);
+
+    // 2. Vientos de Helheim (Ruido de Perlin)
+    let angle = noise(runa.pos.x * 0.005, runa.pos.y * 0.005, frameCount * 0.01) * TWO_PI * 2;
+    let vientoPerlin = p5.Vector.fromAngle(angle);
+    vientoPerlin.mult(0.2); 
+    runa.aplicarFuerza(vientoPerlin);
+
+    // 3. Fricción interactiva al hacer clic
+    if (mouseIsPressed) {
+      let friccion = runa.vel.copy();
+      friccion.normalize();
+      friccion.mult(-1);
+      
+      let coeficienteFriccion = 0.8; 
+      friccion.setMag(coeficienteFriccion);
+      runa.aplicarFuerza(friccion);
+    }
+
+    runa.actualizar();
+    runa.mostrar();
+  }
+}
+
+// --- FUNCIÓN RECURSIVA PARA YGGDRASIL ---
+function generarYggdrasil(pg) {
+  pg.stroke(150, 100, 200, 150); // Color etéreo azul/grisáceo
+  pg.push();
+  pg.translate(pg.width / 2.3, pg.height / 1.7);
+  
+  // Efecto de brillo para el árbol
+  pg.drawingContext.shadowBlur = 20;
+  pg.drawingContext.shadowColor = color(150, 100, 255);
+
+  // Ramas hacia arriba
+  dibujarRama(pg, 90, 10);
+  // Raíces hacia abajo (rotamos 180 grados)
+  pg.rotate(PI);
+  dibujarRama(pg, 70, 8); // Las raíces son un poco más cortas
+  pg.pop();
+}
+
+function dibujarRama(pg, longitud, grosor) {
+  pg.strokeWeight(grosor);
+  pg.line(0, 0, 0, -longitud);
+  pg.translate(0, -longitud);
+  
+  if (longitud > 8) {
+    // Rama derecha
+    pg.push();
+    pg.rotate(PI / 5); // Ángulo de apertura
+    dibujarRama(pg, longitud * 0.7, grosor * 0.7);
+    pg.pop();
+    
+    // Rama izquierda
+    pg.push();
+    pg.rotate(-PI / 5);
+    dibujarRama(pg, longitud * 0.7, grosor * 0.7);
+    pg.pop();
+  }
+}
+
+// --- CLASES FÍSICAS ---
+
+class Atractor {
+  constructor(x, y, m) {
+    this.pos = createVector(x, y);
+    this.masa = m;
+    this.G = 1.2; // Ajustamos un poco para que orbiten más amplio alrededor del árbol
+  }
+
+  atraer(runa) {
+    let fuerza = p5.Vector.sub(this.pos, runa.pos);
+    let distancia = fuerza.mag();
+    distancia = constrain(distancia, 15, 100); // Rango ajustado para el tamaño del árbol
+    fuerza.normalize();
+    
+    let intensidad = (this.G * this.masa * runa.masa) / (distancia * distancia);
+    fuerza.mult(intensidad);
+    return fuerza;
+  }
+}
+
+class Runa {
+  constructor(x, y, m) {
+    this.pos = createVector(x, y);
+    this.vel = p5.Vector.random2D().mult(random(2, 4)); 
+    this.acc = createVector(0, 0);
+    this.masa = m;
+    this.simbolo = caracteresRunas.charAt(floor(random(caracteresRunas.length)));
+  }
+
+  aplicarFuerza(fuerza) {
+    let f = p5.Vector.div(fuerza, this.masa);
+    this.acc.add(f);
+  }
+
+  actualizar() {
+    this.vel.add(this.acc);
+    this.vel.limit(6); 
+    this.pos.add(this.vel);
+    this.acc.mult(0);
+  }
+
+  mostrar() {
+    drawingContext.shadowBlur = 15;
+    drawingContext.shadowColor = color(0, 255, 255);
+    
+    fill(200, 240, 255);
+    noStroke();
+    textSize(this.masa * 10); 
+    textAlign(CENTER, CENTER);
+    text(this.simbolo, this.pos.x, this.pos.y);
+    
+    drawingContext.shadowBlur = 0;
+  }
+}
+````
 
 ## Bitácora de reflexión
+
 
 
 
