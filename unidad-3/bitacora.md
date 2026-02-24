@@ -196,9 +196,20 @@ class Attractor {
 
 ## Bitácora de aplicación 
 
+#### Acividad 4
+
+#### Enunciado
+
+Describe el concepto de tu obra generativa. Explica la historia que quieres contar y cómo crees que esta influencierá las fuerzas que usarás para manipular la aceleración de los elementos visuales. Es decir, explica cómo las fuerzas moldearán las reglas que determinarán las fuerzas.
+El código de la aplicación.
+Un enlace al proyecto en el editor de p5.js.
+Selecciona capturas de pantalla representativas de tu pieza de arte generativa.
+
+#### Solución 
 
 
 ## Bitácora de reflexión
+
 
 
 
