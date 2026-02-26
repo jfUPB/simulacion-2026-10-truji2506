@@ -435,6 +435,38 @@ https://editor.p5js.org/truji2506/sketches/UhyscnZZ4
 
 ## Bitácora de reflexión
 
+#### Acividad 5
+
+#### Enunciado
+
+Explica detalladamente en tu bitácora ¿Qué es el marco de movimiento motion 101 y cómo se relacionan: fuerza, aceleración, velocidad y posición?
+Vas a analizar este video sobre el artista Alexander Calder. Selecciona una de sus obras y luego crea una obra generativa inspirada en la obra de Calder que seleccionaste y el marco de movimiento motion 101 con fuerzas que trabajamos en esta unidad.
+
+#### Solución 
+
+#### 1. ¿Qué es el marco de movimiento motion 101 y cómo se relacionan: fuerza, aceleración, velocidad y posición?
+
+En el marco 101 es la base algoritmica para simular la fisica realista en entornos donde se necesitan visuales usando p5.js, donde usando las fisicas le damos reglas fisicas y dejamos que el sistemas vaya calculando su posición.
+
+En este marco pondera la segunda Ley de Newton y eso establece una cadena basado en 4 conceptos
+
+#### Fuerza:
+
+Es cualquier empuje o movimiento que afecta un objeto, esto consta de varias fuerza sea la gravedad, el viento y fricción donde se pueden sumar en un solo frame para obtener una fuerza neta
+
+#### Aceleración:
+
+Es el resultado de aplicar fuerza a un objeto con masa es lo que dice que tan rapido esta cambiando un objeto con respecto a la velocidad, en p5 la acceleración se va recalculando desde cero en cada frame 
+
+#### Velocidad:
+
+Esto va muy ligado a la aceleracion a lo largo del tiempo, esto nos dice hacia donde y que tan rapido se mueve el objeto en ese instante
+
+#### Posición:
+
+Es el punto en el espacio donde se encuentra el objeto, y este se va actualizando constantemente sumandole la velocidad actual
+
+
 
 
 
