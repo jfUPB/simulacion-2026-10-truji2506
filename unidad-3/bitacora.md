@@ -207,9 +207,33 @@ Selecciona capturas de pantalla representativas de tu pieza de arte generativa.
 
 #### Solución 
 
-Mi concepto de arte generativa se basa en el movimiento con fuerzas "Naturales" y "Sobrenaturales" de unas runas nordicas con moviento natural y al momento de realizar la interacción con dichas runas, se aplicar una fuerza "Sobrenatural" que la fijo como la fricción donde cada click puede escribir algo en nordico y darle un significado.
+#### Historia 
 
-#### Elaboración del código en proceso 
+Mi obra generativa esta inspirada en la mitología nórdica y el universo visual de God of War. La pieza representa a Yggdrasil, el Árbol del Mundo, que actúa como el nucleo vital del cosmos, su alrededor fluyen constantemente las runas antiguas, que representan la magia y la energía de los Nueve Reinos. Estas runas no se mueven de forma aleatoria, sino que están sometidas a las leyes físicas que rigen cada reino, creando un ecosistema dinámico y orgánico.
+
+#### Cómo las fuerzas moldean las reglas de aceleración
+
+#### Atracción Gravitacional (El Núcleo de Yggdrasil): 
+
+Es la fuerza central de la obra. El árbol ejerce una atracción gravitacional constante sobre todas las runas, calculada mediante la constante gravitacional y la distancia. Esta regla garantiza que las runas nunca escapen del lienzo, manteniéndolas en una órbita perpetua.
+
+#### Fricción (Las Nieblas de Niflheim): 
+
+En la franja superior, las runas entran al reino del hielo y la niebla. La regla aquí dicta que experimenten una fuerza de fricción constante en dirección opuesta a su movimiento. Esto simula un aire denso y helado que reduce su aceleración paulatinamente.
+
+#### Resistencia de Fluidos (El Pozo de Urd): 
+
+En la franja inferior, las runas descienden a las aguas mágicas de las raíces. La regla matemática aquí es más agresiva: se aplica una fuerza de arrastre proporcional al cuadrado de la velocidad de la runa. Si una runa entra muy rápido, será frenada de golpe, simulando la densidad del agua.
+
+#### Ruido de Perlin (Vientos Mágicos): 
+
+Para evitar que las orbitas sean aburridas, una fuerza sutil basada en Ruido de Perlin empuja constantemente a las runas, simulando vientos orgánicos que alteran su inercia.
+
+#### Interacción del Usuario: 
+
+Al hacer clic, el usuario interviene como un dios, aplicando una fricción masiva universal que sobreescribe la velocidad de todas las runas, congelando el tiempo temporalmente.
+
+#### Código de la aplicación 
 
 ```c
 let runas = [];
@@ -225,7 +249,8 @@ function setup() {
   generarYggdrasil(arbolBuffer);
   
   // 2. Posicionamos el núcleo gravitacional justo en el tronco del árbol
-  atractor = new Atractor(width / 2, height / 2, 25);
+  // FUERZA 1: ATRACCIÓN GRAVITACIONAL
+  atractor = new Atractor(width / 2.3, height / 1.7, 30);
   
   // 3. Generamos las runas flotantes
   for (let i = 0; i < 80; i++) {
@@ -237,32 +262,69 @@ function setup() {
 }
 
 function draw() {
-  // Fondo oscuro con ligera transparencia para la estela de las runas
   background(10, 15, 25, 80);
 
-  // Dibujamos el árbol Yggdrasil estático en el fondo
+  // --- ZONAS VISUALES DE LOS REINOS ---
+  // Zona de Fricción (Niflheim - Arriba)
+  noStroke();
+  fill(150, 200, 255, 20); // Tono escarcha
+  rect(0, 0, width, 150);
+  
+  // Zona de Fluidos (Pozo de Urd - Abajo)
+  fill(0, 100, 150, 30); // Tono agua profunda
+  rect(0, height - 150, width, 150);
+
+  // Dibujamos el árbol Yggdrasil estático
   image(arbolBuffer, 0, 0);
 
   for (let runa of runas) {
-    // 1. Gravedad hacia el centro del árbol
+    // ---------------------------------------------------------
+    // FUERZA 1: ATRACCIÓN GRAVITACIONAL (Hacia el centro)
+    // ---------------------------------------------------------
     let fuerzaGravedad = atractor.atraer(runa);
     runa.aplicarFuerza(fuerzaGravedad);
 
-    // 2. Vientos de Helheim (Ruido de Perlin)
-    let angle = noise(runa.pos.x * 0.005, runa.pos.y * 0.005, frameCount * 0.01) * TWO_PI * 2;
-    let vientoPerlin = p5.Vector.fromAngle(angle);
-    vientoPerlin.mult(0.2); 
-    runa.aplicarFuerza(vientoPerlin);
-
-    // 3. Fricción interactiva al hacer clic
-    if (mouseIsPressed) {
+    // ---------------------------------------------------------
+    // FUERZA 2: FRICCIÓN (Nieblas de Niflheim - Parte Superior)
+    // ---------------------------------------------------------
+    if (runa.pos.y < 150) {
       let friccion = runa.vel.copy();
       friccion.normalize();
-      friccion.mult(-1);
+      friccion.mult(-1); // Dirección opuesta
       
-      let coeficienteFriccion = 0.8; 
-      friccion.setMag(coeficienteFriccion);
+      let mu = 0.1; // Coeficiente de fricción (constante)
+      friccion.setMag(mu);
       runa.aplicarFuerza(friccion);
+    }
+
+    // ---------------------------------------------------------
+    // FUERZA 3: RESISTENCIA DE FLUIDOS (Pozo de Urd - Parte Inferior)
+    // ---------------------------------------------------------
+    if (runa.pos.y > height - 150) {
+      let drag = runa.vel.copy();
+      drag.normalize();
+      drag.mult(-1); // Dirección opuesta
+      
+      let c = 0.08; // Coeficiente de resistencia del fluido
+      let speedSq = runa.vel.magSq(); // Velocidad al cuadrado
+      drag.setMag(c * speedSq);
+      
+      runa.aplicarFuerza(drag);
+    }
+
+    // Vientos de Helheim (Ruido de Perlin) para dar movimiento orgánico
+    let angle = noise(runa.pos.x * 0.005, runa.pos.y * 0.005, frameCount * 0.01) * TWO_PI * 2;
+    let vientoPerlin = p5.Vector.fromAngle(angle);
+    vientoPerlin.mult(0.1); 
+    runa.aplicarFuerza(vientoPerlin);
+
+    // Fricción interactiva al hacer clic (Congela todo)
+    if (mouseIsPressed) {
+      let friccionInteractiva = runa.vel.copy();
+      friccionInteractiva.normalize();
+      friccionInteractiva.mult(-1);
+      friccionInteractiva.setMag(0.08);
+      runa.aplicarFuerza(friccionInteractiva);
     }
 
     runa.actualizar();
@@ -272,19 +334,16 @@ function draw() {
 
 // --- FUNCIÓN RECURSIVA PARA YGGDRASIL ---
 function generarYggdrasil(pg) {
-  pg.stroke(150, 100, 200, 150); // Color etéreo azul/grisáceo
+  pg.stroke(150, 100, 200, 150); 
   pg.push();
-  pg.translate(pg.width / 2.3, pg.height / 1.7);
+  pg.translate(pg.width / 2, pg.height / 1.6);
   
-  // Efecto de brillo para el árbol
   pg.drawingContext.shadowBlur = 20;
   pg.drawingContext.shadowColor = color(150, 100, 255);
 
-  // Ramas hacia arriba
-  dibujarRama(pg, 90, 10);
-  // Raíces hacia abajo (rotamos 180 grados)
+  dibujarRama(pg, 90, 10); // Ramas
   pg.rotate(PI);
-  dibujarRama(pg, 70, 8); // Las raíces son un poco más cortas
+  dibujarRama(pg, 70, 8); // Raíces
   pg.pop();
 }
 
@@ -294,13 +353,11 @@ function dibujarRama(pg, longitud, grosor) {
   pg.translate(0, -longitud);
   
   if (longitud > 8) {
-    // Rama derecha
     pg.push();
-    pg.rotate(PI / 5); // Ángulo de apertura
+    pg.rotate(PI / 5);
     dibujarRama(pg, longitud * 0.7, grosor * 0.7);
     pg.pop();
     
-    // Rama izquierda
     pg.push();
     pg.rotate(-PI / 5);
     dibujarRama(pg, longitud * 0.7, grosor * 0.7);
@@ -314,15 +371,16 @@ class Atractor {
   constructor(x, y, m) {
     this.pos = createVector(x, y);
     this.masa = m;
-    this.G = 1.2; // Ajustamos un poco para que orbiten más amplio alrededor del árbol
+    this.G = 1.5; 
   }
 
   atraer(runa) {
     let fuerza = p5.Vector.sub(this.pos, runa.pos);
     let distancia = fuerza.mag();
-    distancia = constrain(distancia, 15, 100); // Rango ajustado para el tamaño del árbol
+    distancia = constrain(distancia, 15, 100); 
     fuerza.normalize();
     
+    // Ley de gravitación universal
     let intensidad = (this.G * this.masa * runa.masa) / (distancia * distancia);
     fuerza.mult(intensidad);
     return fuerza;
@@ -339,6 +397,7 @@ class Runa {
   }
 
   aplicarFuerza(fuerza) {
+    // Segunda ley de Newton: a = F / m
     let f = p5.Vector.div(fuerza, this.masa);
     this.acc.add(f);
   }
@@ -347,7 +406,7 @@ class Runa {
     this.vel.add(this.acc);
     this.vel.limit(6); 
     this.pos.add(this.vel);
-    this.acc.mult(0);
+    this.acc.mult(0); // Reseteo de aceleración
   }
 
   mostrar() {
@@ -365,7 +424,17 @@ class Runa {
 }
 ````
 
+#### Enlace del proyecto
+
+https://editor.p5js.org/truji2506/sketches/UhyscnZZ4
+
+#### Captura de pantalla
+
+<img width="797" height="597" alt="image" src="https://github.com/user-attachments/assets/6689665b-589c-4d9b-bb38-a166a35aed99" />
+
+
 ## Bitácora de reflexión
+
 
 
 
