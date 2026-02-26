@@ -2,8 +2,792 @@
 
 ## Bitácora de proceso de aprendizaje
 
+#### Actividad 1
+
+#### Enunciado
+
+Distruta esta actividad como quieras. Busca inspiración. Te deseo que te enamores del tema, es irresistible. Te pediré que me cuentes qué trabajo te gustó más y por qué.
+
+#### Solución
+
+En lo personal, esta fue la obra que mas me gusto, 
+
+<img width="1841" height="846" alt="image" src="https://github.com/user-attachments/assets/d4161e19-ee43-4a58-9a68-33a35eacfd55" />
+
+Ya que con un codigo simple se realizó una obra muy llamativa e interactiva
+
+#### Actividad 2
+
+#### Enunciado
+
+¿Cómo funciona la suma dos vectores en p5.js?
+¿Por qué esta línea position = position + velocity; no funciona?
+
+#### Solución
+
+1. La suma de vectores se realiza con el metodo .add(), cuando se ejecuta position.add(velocity), suma los componentes individuales
+2. Porque serian 3 reglas que irian en contra del lenguaje de JavaScript, position y velocity no son valores simples, estos son objetos que puede contener multiples propiedades
+
+#### Actividad 3
+
+#### Enunciado
+
+¿Qué tuviste que hacer para hacer la conversión propuesta?
+Escribe el código que utilizaste para resolver el ejercicio.
+
+#### Solución
+
+1. Se modifico un codigo de la unidad 1 añadiendole vectores
+
+```ruby
+// The Nature of Code
+// Walker con p5.Vector (Estructura original)
+
+let walker;
+
+function setup() {
+  createCanvas(640, 240);
+  walker = new Walker();
+  background(255);
+}
+
+function draw() {
+  walker.step();
+  walker.show();
+}
+
+class Walker {
+  constructor() {
+    // Sustituimos this.x y this.y por un solo vector
+    this.pos = createVector(width / 2, height / 2);
+  }
+
+  show() {
+    stroke(0);
+    // Accedemos a los componentes mediante el punto
+    point(this.pos.x, this.pos.y);
+  }
+
+  step() {
+    const choice = floor(random(4));
+    
+    // Aplicamos los cambios directamente a las propiedades x o y del vector
+    if (choice == 0) {
+      this.pos.x++;
+    } else if (choice == 1) {
+      this.pos.x--;
+    } else if (choice == 2) {
+      this.pos.y++;
+    } else {
+      this.pos.y--;
+    }
+  }
+}
+```
+
+#### Actividad 4
+
+#### Enunciado
+
+¿Qué resultado esperas obtener en el programa anterior?
+¿Qué resultado obtuviste?
+Recuerda los conceptos de paso por valor y paso por referencia en programación.
+¿Qué tipo de paso se está realizando en el código?
+¿Qué aprendiste?
+
+#### Solución
+
+1. Esperaba obtener que en el primer console.log muestre el vector original (6,9) y que el segundo mostrala lo mismo, asumiento que el función playingVector trabaja con una copia local y que no afectaba la variable global
+2. El resultado que obtuve
+
+<img width="319" height="70" alt="image" src="https://github.com/user-attachments/assets/edfe8e68-1a8c-464d-9a97-e1926edc703e" />
+
+El valor de la variable original cambio
+
+3. Se está realizando un paso por referencia
+
+   Paso por valor y paso por referencia
+
+   En el codigo le estoy dando la apertura de la caja donde esta guardado el vector, entonces cuando la funcion modifica v.x y v.y esta alterando el contenido de la caja original.
+
+4. Aprendi que los vectores son objetos. que tengo que tener cuidado cuando los vectores reciben un parametro y este lo altera permanentemente al vector original.
+
+#### Actividad 5
+
+#### Enunciado
+
+¿Para qué sirve el método mag()? Nota que hay otro método llamado magSq(). ¿Cuál es la diferencia entre ambos? ¿Cuál es más eficiente?
+¿Para qué sirve el método normalize()?
+Te encuentras con un periodista en la calle y te pregunta ¿Para qué sirve el método dot()? ¿Qué le responderías en un frase?
+El método dot() tiene una versión estática y una de instancia. ¿Cuál es la diferencia entre ambas?
+Ahora el mismo periodista curioso de antes te pregunta si le puedes dar una intuición geométrica acerca del producto cruz. Entonces te pregunta ¿Cuál es la interpretación geométrica del producto cruz de dos vectores? Tu respuesta debe incluir qué pasa con la orientación y la magnitud del vector resultante.
+¿Para que te puede servir el método dist()?
+¿Para qué sirven los métodos normalize() y limit()?
+
+#### Solución
+
+1. Mag() calcula la longitud  real del vector usando la raiz cudrada de x, y eso al cuadrado y MagSq() calcula la magnitud al cuadrado y este evita la raiz
+2. normalize() sirve para convertir un vector en un vector unitario, es decir, hace que su longitud sea exactamente 1 sin cambiar la dirección hacia la que apunta.
+3. Que es una herramienta que nos dice qué tanto apunta un vector en la misma dirección que otro; si el resultado es alto, van de la mano; si es cero, son perpendiculares
+4. De instancia (v.dot(w)): Modifica o actúa sobre el objeto específico v.
+
+Estática (p5.Vector.dot(v, w)): Es una función de utilidad de la "fábrica" de vectores que toma dos vectores y da el resultado sin necesidad de que uno pertenezca al otro.
+
+5. El producto cruz genera un nuevo vector que es totalmente perpendicular al plano formado por los dos originales (su orientación); su magnitud representa el área del paralelogramo que ambos vectores dibujarían en el espacio
+6. Sirve para calcular la distancia euclidiana entre dos puntos (tratados como vectores de posición). Es como tirar una regla invisible entre el vector A y el vector B.
+7. normalize(): Fija la fuerza (magnitud) en 1. Útil para obtener solo la dirección.
+
+limit(): Restringe la magnitud de un vector a un valor máximo. Si el vector es más corto, se queda igual; si es más largo, lo "recorta" a ese máximo. Es fundamental para controlar velocidades máximas en simulaciones.
+
+#### Actividad 6
+
+#### Enunciado
+
+El código que genera el resultado que te pedí.
+¿Cómo funciona lerp() y lerpColor().
+¿Cómo se dibuja una flecha usando drawArrow()?
+
+
+#### Solución
+1.
+```ruby
+function setup() {
+    createCanvas(400, 400);
+}
+
+function draw() {
+    background(200);
+
+    let v0 = createVector(50, 50);   // Origen común
+    let v1 = createVector(300, 0);  // Vector rojo
+    let v2 = createVector(0, 300);  // Vector azul
+    
+    // El vector verde conecta la punta de v1 con la punta de v2
+    // Matemáticamente es: v2 - v1
+    let v_green = p5.Vector.sub(v2, v1);
+    
+    // Animación de interpolación (0 a 1)
+    let amt = map(sin(frameCount * 0.03), -1, 1, 0, 1);
+    
+    // El vector morado nace en v0 y se mueve a lo largo del verde
+    // Interpolamos entre el vector v1 y el v2
+    let v3 = p5.Vector.lerp(v1, v2, amt);
+
+    // 1. Dibujamos los vectores principales desde el origen (v0)
+    drawArrow(v0, v1, 'red');
+    drawArrow(v0, v2, 'blue');
+    drawArrow(v0, v3, 'purple');
+
+    // 2. Dibujamos el vector verde EMPEZANDO en la punta del rojo (v0 + v1)
+    let puntaRoja = p5.Vector.add(v0, v1);
+    drawArrow(puntaRoja, v_green, 'green');
+}
+
+function drawArrow(base, vec, myColor) {
+    push();
+    stroke(myColor);
+    strokeWeight(3);
+    fill(myColor);
+    translate(base.x, base.y);
+    line(0, 0, vec.x, vec.y);
+    rotate(vec.heading());
+    let arrowSize = 7;
+    translate(vec.mag() - arrowSize, 0);
+    triangle(0, arrowSize / 2, 0, -arrowSize / 2, arrowSize, 0);
+    pop();
+}
+```
+2. Ambas funciones realizan una interpolación lineal, que consiste en encontrar un valor intermedio entre dos puntos basándose en un porcentaje (un número entre 0 y 1).
+
+lerp(valor1, valor2, amt): Calcula un número entre dos números. Si amt es 0.5, devuelve el punto medio exacto. En vectores, p5.Vector.lerp(v1, v2, amt) calcula un nuevo vector que está en el camino entre v1 y v2.
+
+lerpColor(c1, c2, amt): Mezcla dos colores. Si tienes rojo y azul con un amt de 0.5, el resultado será un color morado. Es muy útil para transiciones suaves de color en animaciones.
+
+3. La función drawArrow() no es nativa de p5.js, es una función personalizada que utiliza transformaciones de coordenadas para facilitar el dibujo. Funciona así:
+
+translate(base.x, base.y): Mueve el "punto 0,0" del lienzo a la ubicación donde debe nacer la flecha.
+
+line(0, 0, vec.x, vec.y): Dibuja el cuerpo de la flecha desde el nuevo origen hasta la punta definida por el vector.
+
+rotate(vec.heading()): Gira todo el sistema de dibujo para que el eje X apunte exactamente en la dirección del vector.
+
+Dibujo del triángulo:
+
+Se traslada el origen al final del vector (vec.mag()).
+
+Se dibuja un triangle() que, gracias a la rotación previa, siempre queda alineado con la punta de la línea.
+
+push() y pop(): Aseguran que estas traslaciones y rotaciones no afecten a los demás elementos que se dibujen después.
+
+
+#### Actividad 7
+
+#### Enunciado
+
+Cuál es el concepto del marco motion 101 y cómo se interpreta geométricamente.
+¿Cómo se aplica motion 101 en el ejemplo?
+
+#### Solución
+
+1. El concepto de motion 101 empieza a tener logica cuando queremos calcular movimiento sin necesidad de que sea preciso, se entiendo como posición inicial y posición futura, con velocidad delta de t y esto puede calcular usando la velocidad y para encontrar la aceleración delta de t
+2. En el ejemplo 1.8 de la documentación
+   
+```ruby
+    this.velocity.add(this.acceleration);
+    this.velocity.limit(this.topSpeed);
+    this.position.add(this.velocity);
+```
+
+#### Actividad 8
+
+#### Enunciado
+
+¿Qué observaste cuando usas cada una de las aceleraciones propuestas?
+
+1. Acelerción constante
+2. Aceleración aleatoria
+3. Aceleración hacia el mouse
+
+#### Solución
+
+1. Se interactuo con el concepto de aceleración constante, cambiandole varios parametros para lo hicista de forma horizontal, con un circulo un poco mas pequeño y su velocidad. (Representa fuerzas constantes de la naturaleza, como la gravedad (si es hacia abajo) o el viento)
+2. La velocidad cambia caóticamente porque la fuerza que la empuja cambia de dirección en cada fotograma (60 veces por segundo).
+3. Aquí vemos la diferencia entre cambiar la posición (teletransportarse al mouse) y cambiar la aceleración (ser empujado hacia el mouse).
+
 
 ## Bitácora de aplicación 
 
+#### Actividad 9
+
+#### Enunciado
+
+Describe el concepto de tu obra generativa. Explica el concepto de tu obra generativa, qué regla aplicaste para la aceleración y por qué, si fue una decisión de diseño, o qué te evoca, si fue una exploración artística.
+El código de la aplicación.
+Un enlace al proyecto en el editor de p5.js.
+Selecciona capturas de pantalla representativas de tu pieza de arte generativa.
+
+#### Solución
+
+#### 1. Concepto:
+La obra visualiza un sistema de particulas que simula un enjambre. las partículas actuan como organismos microscópicos que fluyen en una corriente invisible.
+
+#### 2. Reglas aplicadadas para la aceleracion
+
+#### Ruido de Perlin: 
+Cada partícula calcula su aceleración basandose en noise(). Esto crea un movimiento organico, fluido y suave, como si estuvieran flotando en agua o viento. Como La naturaleza y la calma.
+
+#### Aceleración de Interacción (Mouse):
+
+#### Si no presionas nada: 
+
+Las partículas sienten curiosidad y tienen una aceleración leve hacia el mouse.
+
+#### Si presionas clic: 
+
+La aceleración se invierte violentamente, simulando un barrera o una explosión de energia.
+
+#### Aceleración de Fricción: 
+
+Una regla de aceleración negativa proporcional a la velocidad actual. Esto evita que las partículas ganen velocidad infinita y hace que el movimiento se sienta "viscoso".
+
+#### ¿Por qué estas reglas?
+
+Queria explorar la tension entre el orden natural y la intervención caótica. La aceleración no es constante, sino que es un mapa cambiante que depende de la posición en el espacio y la presencia del observador siendo el observador el mouse.
+
+#### Codigo
+
+```ruby
+[let particles = [];
+const NUM_PARTICLES = 300; // Cantidad de partículas
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  // Inicializamos el enjambre
+  for (let i = 0; i < NUM_PARTICLES; i++) {
+    particles.push(new Particle());
+  }
+  background(10);
+}
+
+function draw() {
+  // Un fondo semitransparente crea el efecto de "rastro" o estela
+  background(10, 20); 
+
+  // Vector del mouse
+  let mouse = createVector(mouseX, mouseY);
+
+  for (let p of particles) {
+    // --- REGLA 1: Aceleración por Ruido (Flujo natural) ---
+    // Usamos la posición de la partícula para obtener un valor de ruido
+    // Esto crea un "campo de flujo" invisible
+    let angle = noise(p.pos.x * 0.005, p.pos.y * 0.005, frameCount * 0.001) * TWO_PI * 4;
+    let flowForce = p5.Vector.fromAngle(angle);
+    flowForce.mult(0.5); // Ajustar la fuerza del flujo
+    p.applyForce(flowForce);
+
+    // --- REGLA 2: Aceleración por Interacción (Mouse) ---
+    let mouseForce = p5.Vector.sub(mouse, p.pos);
+    let d = mouseForce.mag();
+    
+    if (d < 300) { // Solo afecta si el mouse está cerca
+      mouseForce.normalize();
+      
+      if (mouseIsPressed) {
+        // Si clic: REPULSIÓN FUERTE (Explosión)
+        mouseForce.mult(-10); 
+      } else {
+        // Sin clic: ATRACCIÓN SUAVE (Curiosidad)
+        mouseForce.mult(0.5); 
+      }
+      
+      // Mapeamos la fuerza para que sea más fuerte cuanto más cerca
+      // (Rompiendo un poco la física real para efecto artístico)
+      mouseForce.mult(map(d, 0, 300, 3, 0));
+      p.applyForce(mouseForce);
+    }
+
+    // --- MOTION 101 ---
+    p.update();
+    p.checkEdges();
+    p.show();
+  }
+}
+
+class Particle {
+  constructor() {
+    this.pos = createVector(random(width), random(height));
+    this.vel = createVector(0, 0);
+    this.acc = createVector(0, 0);
+    this.maxSpeed = 6;
+    // Color aleatorio entre azules y púrpuras
+    this.color = color(random(100, 255), random(50, 200), 255);
+  }
+
+  applyForce(force) {
+    // F = A (asumiendo masa = 1)
+    this.acc.add(force);
+  }
+
+  update() {
+    // Algoritmo Motion 101
+    this.vel.add(this.acc);
+    this.vel.limit(this.maxSpeed);
+    this.pos.add(this.vel);
+    
+    // Importante: Limpiamos la aceleración para el siguiente frame
+    this.acc.mult(0); 
+  }
+
+  show() {
+    noStroke();
+    fill(this.color);
+    // El tamaño cambia según la velocidad (más rápido = más estirado/grande)
+    let r = map(this.vel.mag(), 0, this.maxSpeed, 2, 6);
+    circle(this.pos.x, this.pos.y, r);
+  }
+
+  checkEdges() {
+    // Si salen por un lado, entran por el otro (universo toroidal)
+    if (this.pos.x > width) this.pos.x = 0;
+    if (this.pos.x < 0) this.pos.x = width;
+    if (this.pos.y > height) this.pos.y = 0;
+    if (this.pos.y < 0) this.pos.y = height;
+  }
+}
+
+// Ajustar canvas si se cambia el tamaño de ventana
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  background(10);
+}
+```
+
+#### Enlace
+
+https://editor.p5js.org/truji2506/sketches/t_0AAOT4W
+
+#### Capturas
+
+<img width="915" height="773" alt="image" src="https://github.com/user-attachments/assets/f5d59506-a2fc-40be-a548-b51f24e53790" />
+
+<img width="912" height="774" alt="image" src="https://github.com/user-attachments/assets/7d21b7d0-882c-41b7-a51d-868822b1b1d1" />
 
 ## Bitácora de reflexión
+
+#### Explicación codigo de la unidad 9 
+
+Lo voy a dividir por fases para que sea un poco mas claro 
+
+#### Fase 1 
+
+```ruby
+let particles = [];
+const NUM_PARTICLES = 300;
+```
+1. En let particles = []; Creamoos una lista vacia, aqui guardaremos a cada uno de nuestras particulas
+2. const NUM_PARTICLES = 300; Una constante para definir cuantas particulas queremos.
+   
+```ruby
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  for (let i = 0; i < NUM_PARTICLES; i++) {
+    particles.push(new Particle());
+  }
+  background(10); 
+}
+```
+
+1. createCanvas(windowWidth, windowHeight); Crea el lienzo del tamaño total de la ventana,  pero lo cambie para que tuviera un tamaño constante
+2. for (let i = 0; i < NUM_PARTICLES; i++) Es un bucle que se repite 300 veces
+3. particles.push(new Particle()); En cada vuelta del bucle, crea una instancia de la clase donde nace una nueva particula y la mete push dentro de la lista particulas
+4.  background(10); Esto lo que hace es pintar de color gris muy oscuro una sola vez al princpio
+
+#### Fase 2
+
+```ruby
+function draw() {
+  background(10, 20);
+```
+Lo que hace el 10 es poner el fondo gris oscuro 
+
+y lo que hace el 20 es darle como una transparencia para que pinte en una capa semi transparente
+
+```ruby
+let mouse = createVector(mouseX, mouseY);
+```
+
+Esta es la creación de un vector que representa la ubicación actual del puntero del mouse, ya mas adelanto con esto ayudara a calcular distancias y direcciones.
+
+```ruby
+for (let p of particles) {
+```
+Esto lo que ayuda es preparar a la particula dentro de la lista de particula ya que le vamos a dar instrucciones a cada una 
+
+```ruby
+let angle = noise(p.pos.x * 0.005, p.pos.y * 0.005, frameCount * 0.001) * TWO_PI * 4;
+```
+
+1. El noise nos ayuda a generar un numero en el 0 y 1
+2. Uso p.pos.x y p.pos.y para que el ruido dependa de donde este la particula
+3. Uso FrameCount para que el ruido cambie con el tiempo
+4. TWO_PI * 4 Convetimos ese 0 - 1 en un angulo de rotación de 0 a 720 grados
+
+```ruby
+let flowForce = p5.Vector.fromAngle(angle);
+    flowForce.mult(0.5); 
+    p.applyForce(flowForce);
+```
+
+1. fromAngle(angle) Cree un vector pequeño que apunta en la dirección de ese angulo
+2. mult(0.5) Reduce la fuerza a la mitad para que el viento sea suave
+3. p.applyForce(...) Y ya empujamos la particula con ese viento suave
+
+```ruby
+let mouseForce = p5.Vector.sub(mouse, p.pos);
+    let d = mouseForce.mag();
+```
+
+1. sub(mouse, p.pos) Esto lo que hace es restar los vectores de destino y de origen, y crea como una flecha que va desde la particula hasta el mouse
+2. mag() Calcula la longuitud de esta flecha que seria la distancia en pixeles
+
+```ruby
+if (d < 300) { 
+      mouseForce.normalize();
+```
+
+1. if (d < 300) Calcula la fisica si el mouse esta cerca
+2. normalize() Lo que hace es convertir la distancia y en un vector de longitud
+
+```ruby
+if (mouseIsPressed) {
+        mouseForce.mult(-10); 
+      } else {
+        mouseForce.mult(0.5); 
+      }
+```
+
+1. mouseIsPressed Aca ponemos un if anidado donde si es verdadero osea dando un click multiplicado por -10, y lo que hace es invertir la dirección de repulcion de una forma brusca
+2. Si es falso osea que no se oprime lo multiplicamos por 0.5 y se hace una atracción suave
+
+```ruby
+mouseForce.mult(map(d, 0, 300, 3, 0));
+      p.applyForce(mouseForce);
+    }
+```
+1. map(...) Hace que la fuerza sea variable. si esta muy cerca osea 0 es multiplicado por 3 y si esta lejos osea 300 es multiplcado por 0
+2. applyForce Aqui es donde aplicamos esa segunda fuerza a la particula y ya tendria dos fuerzas el viento y el mouse
+
+```ruby
+p.update();
+    p.checkEdges();
+    p.show();
+  }
+}
+```
+1. Aqui es donde llamamos las funciones internas de la particula para que actualice sus calculos y se dibuje
+
+#### Fase 3
+
+```ruby
+constructor() {
+    this.pos = createVector(random(width), random(height));
+    this.vel = createVector(0, 0);
+    this.acc = createVector(0, 0);
+    this.maxSpeed = 6;
+    this.color = color(random(100, 255), random(50, 200), 255);
+  }
+```
+
+1. this.pos = createVector(random(width), random(height)); La particula nace en cualquier lugar el lienzo
+2. this.vel = createVector(0, 0); Como se mueve la principio esta quieta
+3. this.acc = createVector(0, 0); Aqui es donde se debe de sentir fuerza y por ahora ninguna
+4. this.maxSpeed = 6; se pone un limite de velocidad para que no se mueve muy abruptamente
+5. this.color = color(random(100, 255), random(50, 200), 255); aqui donde le doy colocar a la particula
+
+El concepto es que this osea yo (Cada particula) y cada una de ellas tienen su propia pos, su propia velocidad y su propia acceleración.
+
+```ruby
+applyForce(force) {
+  // Segunda Ley de Newton: Fuerza = Masa * Aceleración
+  // Aquí asumimos que Masa = 1, así que Fuerza = Aceleración.
+  this.acc.add(force);
+}
+```
+
+1. se utliza add ya que suma y no iguala
+2. Asi pueden actual varias fuerzas al mismo tiempo, al usar add acumulamos todas la fuerzas que influyen en la particula
+
+```ruby
+update() {
+  // PASO A: La aceleración cambia la velocidad
+  this.vel.add(this.acc);
+  
+  // PASO B: Frenamos un poco si va demasiado rápido
+  this.vel.limit(this.maxSpeed);
+  
+  // PASO C: La velocidad cambia la posición (Moverse)
+  this.pos.add(this.vel);
+  
+  // PASO D: ¡EL RESETEO IMPORTANTE!
+  this.acc.mult(0); 
+}
+```
+
+1. this.vel.add(this.acc); La aceleración cambia la velocidad
+2. this.vel.limit(this.maxSpeed); Frena un poco si va muy raido
+3. this.pos.add(this.vel); La velocidad cambia la posición
+4. this.acc.mult(0); aqui lo que hacemos es resetear la fuerza de ese momento, para ver que fuerzas llegan en el instante
+
+```ruby
+show() {
+  noStroke(); // Sin bordes negros
+  fill(this.color); // Usamos su color personal
+  
+  // Mapeo dinámico:
+  // Si la velocidad es 0, el radio es 2 (puntito pequeño).
+  // Si la velocidad es 6 (maxSpeed), el radio es 6 (punto grande).
+  let r = map(this.vel.mag(), 0, this.maxSpeed, 2, 6);
+  
+  circle(this.pos.x, this.pos.y, r);
+}
+```
+1.  noStroke(); sin bordes negros
+2.   fill(this.color); Uso del color que quiera
+3.   let r = map(this.vel.mag(), 0, this.maxSpeed, 2, 6); Aqui es el mapeo dinamico, si la velocidad es 0 el radio es 2 osea que particula es mas pequeña, si la velocidad 6 el radio es 6 y la particula se hace mas grande.
+
+```ruby
+ checkEdges() {
+  // Si se pasa del borde derecho (width), aparece en la izquierda (0)
+  if (this.pos.x > width) this.pos.x = 0;
+  
+  // Si se pasa del borde izquierdo (0), aparece en la derecha (width)
+  if (this.pos.x < 0) this.pos.x = width;
+  
+  // Lo mismo para arriba y abajo...
+  if (this.pos.y > height) this.pos.y = 0;
+  if (this.pos.y < 0) this.pos.y = height;
+}
+```
+1. if (this.pos.x > width) this.pos.x = 0; en el checkEdges lo que hace es que si la particula pasa por alguno de los extremos pasa al otro lado derecha a izquiera y de izquierda a derecha y lo mismo de arriba para abajo y de abajo para arriba.
+
+
+#### Actividad 10
+
+#### Enunciado
+
+Describe el concepto de tu obra generativa. Explica el concepto de tu obra generativa.
+El código de la aplicación.
+Un enlace al proyecto en el editor de p5.js.
+Selecciona capturas de pantalla representativas de tu pieza de arte generativa.
+
+#### Solución
+
+#### Concpeto y explicación de la obra generativa
+
+De Motion 101 (Shiffman): Utilizo estrictamente el motor de física Aceleración -> Velocidad -> Posición. Las partículas no se teletransportan; tienen inercia y masa.
+
+De Jeffrey Ventrella: Implementé una matriz de afinidad asimétrica:
+
+Los Rojos persiguen a los Verdes.
+
+Los Verdes persiguen a los Azules.
+
+Los Azules persiguen a los Rojos.
+Esto crea un ciclo infinito de persecución (como el juego piedra, papel o tijera), generando espirales y clústeres dinámicos.
+
+De Jared Tarbell: Visualmente, decidí no limpiar el fondo completamente en cada fotograma (background(0, 10)). Esto deja un rastro fantasmal que revela la historia del movimiento y las órbitas, creando texturas "arenosas" y orgánicas en lugar de simples puntos moviéndose.
+
+#### Codigo de la obra
+
+```ruby
+// Actividad 10: "Cromatodinámica Social"
+// Inspirado en: Motion 101 (Shiffman) + Clusters (Ventrella) + Trazos (Tarbell)
+
+let particles = [];
+const NUM_PARTICLES = 150;
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  // Creamos partículas con 3 tipos distintos (0, 1, 2)
+  for (let i = 0; i < NUM_PARTICLES; i++) {
+    particles.push(new Particle(random(width), random(height), floor(random(3))));
+  }
+  background(0);
+}
+
+function draw() {
+  // Estética Tarbell: Fondo con transparencia para dejar rastro
+  noStroke();
+  fill(0, 15); 
+  rect(0, 0, width, height);
+
+  // Doble bucle: Todas las partículas interactúan con todas
+  for (let i = 0; i < particles.length; i++) {
+    let p1 = particles[i];
+    
+    // Calcular fuerzas basadas en las otras partículas
+    // (Optimizamos calculando solo vecinos cercanos si fueran muchos, 
+    // pero con 150 podemos hacerlo todos contra todos)
+    for (let j = 0; j < particles.length; j++) {
+      if (i !== j) {
+        let p2 = particles[j];
+        p1.interact(p2);
+      }
+    }
+    
+    p1.update();
+    p1.checkEdges();
+    p1.show();
+  }
+}
+
+class Particle {
+  constructor(x, y, type) {
+    this.pos = createVector(x, y);
+    this.vel = createVector(0, 0); // Empiezan quietas
+    this.acc = createVector(0, 0);
+    this.type = type; // 0: Rojo, 1: Verde, 2: Azul
+    this.maxSpeed = 3;
+    this.maxForce = 0.2;
+    
+    // Asignar color según el tipo
+    if (this.type == 0) this.col = color(255, 50, 50); // Rojo
+    else if (this.type == 1) this.col = color(50, 255, 50); // Verde
+    else this.col = color(50, 50, 255); // Azul
+  }
+
+  // El núcleo de Ventrella: Reglas de atracción/repulsión
+  interact(other) {
+    let force = p5.Vector.sub(other.pos, this.pos);
+    let d = force.mag();
+    
+    // Solo interactúan si están relativamente cerca (visión local)
+    // y no demasiado cerca (para evitar colapsar en un punto infinito)
+    if (d > 0 && d < 200) {
+      force.normalize();
+      
+      let strength = 0;
+
+      // REGLAS DE "VIDA ARTIFICIAL":
+      // Si soy Rojo (0)...
+      if (this.type === 0) {
+        if (other.type === 0) strength = 0.5;   // Me agrupo con Rojos
+        if (other.type === 1) strength = 1.0;   // Persigo Verdes (Fuerte)
+        if (other.type === 2) strength = -1.0;  // Huyo de Azules
+      }
+      // Si soy Verde (1)...
+      else if (this.type === 1) {
+        if (other.type === 1) strength = 0.5;   // Me agrupo con Verdes
+        if (other.type === 2) strength = 1.0;   // Persigo Azules (Fuerte)
+        if (other.type === 0) strength = -1.0;  // Huyo de Rojos
+      }
+      // Si soy Azul (2)...
+      else if (this.type === 2) {
+        if (other.type === 2) strength = 0.5;   // Me agrupo con Azules
+        if (other.type === 0) strength = 1.0;   // Persigo Rojos (Fuerte)
+        if (other.type === 1) strength = -1.0;  // Huyo de Verdes
+      }
+
+      // Aplicamos la magnitud calculada a la fuerza
+      force.mult(strength);
+      
+      // Aplicamos la fuerza a la aceleración (Motion 101)
+      this.applyForce(force);
+    }
+  }
+
+  applyForce(force) {
+    this.acc.add(force);
+  }
+
+  update() {
+    // Algoritmo clásico Motion 101
+    this.vel.add(this.acc);
+    this.vel.limit(this.maxSpeed);
+    this.pos.add(this.vel);
+    this.acc.mult(0); // Limpiar aceleración
+  }
+
+  show() {
+    noStroke();
+    // Dibujamos con un poco de transparencia para el efecto de estela
+    fill(red(this.col), green(this.col), blue(this.col), 200);
+    circle(this.pos.x, this.pos.y, 6);
+  }
+
+  checkEdges() {
+    // Espacio toroidal (Pac-Man) para continuidad
+    if (this.pos.x > width) this.pos.x = 0;
+    else if (this.pos.x < 0) this.pos.x = width;
+    if (this.pos.y > height) this.pos.y = 0;
+    else if (this.pos.y < 0) this.pos.y = height;
+  }
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  background(0);
+}
+```
+
+#### Enlace
+
+https://editor.p5js.org/truji2506/sketches/t_0AAOT4W
+
+#### Captura de pantalla
+
+<img width="917" height="678" alt="image" src="https://github.com/user-attachments/assets/fcb269d1-4562-4021-8844-9d9c4adecbc3" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
