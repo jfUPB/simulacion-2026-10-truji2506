@@ -466,6 +466,9 @@ Esto va muy ligado a la aceleracion a lo largo del tiempo, esto nos dice hacia d
 
 Es el punto en el espacio donde se encuentra el objeto, y este se va actualizando constantemente sumandole la velocidad actual
 
+Todas las anteriores generan un ciclo constante, donde las fuerzas alteran la aceleración, la aceleración altera la velocidad, la velocidad altera la posición.
+
+
 
 
 
