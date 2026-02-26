@@ -468,7 +468,159 @@ Es el punto en el espacio donde se encuentra el objeto, y este se va actualizand
 
 Todas las anteriores generan un ciclo constante, donde las fuerzas alteran la aceleración, la aceleración altera la velocidad, la velocidad altera la posición.
 
+#### 2. Análisis de la Obra de Alexander Calder
 
+La obra que me parecio mucho mas atractiva fue Red Mobile, donde el autor revolucionó el arte al introducir el movimiento fisico real, donde esta obra esta sometidas a fuerzas contantes
+
+La Gravedad: Que tira de las placas de metal hacia el suelo.
+
+La Tensión: El alambre estructural que ejerce una fuerza elástica (Ley de Hooke) hacia arriba, contrarrestando la gravedad para mantener las piezas suspendidas.
+
+El Viento: Fuerzas aerodinámicas caóticas que interactúan con las formas planas, dándole a la escultura su movimiento orgánico e hipnótico.
+
+#### 3. Obra Generativa Inspirada en Calder
+
+Ya que Motion 101 trabaja con físicas lineales (vectores 2D) y no con cuerpos rígidos rotacionales complejos, he adaptado la escultura cinética de Calder usando Fuerzas de Resorte (Spring Forces).
+Cada pieza del "móvil" digital está conectada por un resorte invisible a un punto de anclaje. Le aplicaremos la Gravedad (hacia abajo), la Tensión del Resorte (hacia el anclaje) y un Viento basado en Ruido de Perlin para que la escultura "respire" y se balancee suavemente. Utilizamos la paleta de colores primarios clásica de Calder.
+
+#### Codigo 
+
+```c
+// Obra: "Móvil Cinético Generativo"
+// Inspiración: Alexander Calder + Motion 101
+
+let piezas = [];
+let resortes = [];
+
+function setup() {
+  createCanvas(800, 600);
+  
+  // Creamos 3 puntos de anclaje en el techo
+  let anclaje1 = createVector(width/2 - 150, 50);
+  let anclaje2 = createVector(width/2, 50);
+  let anclaje3 = createVector(width/2 + 150, 50);
+
+  // Creamos las piezas del móvil (formas abstractas de Calder)
+  // Parámetros Mover: x, y, masa, color
+  let p1 = new Mover(width/2 - 150, 300, 4, color(220, 30, 30)); // Rojo
+  let p2 = new Mover(width/2, 400, 2, color(30, 30, 220));      // Azul
+  let p3 = new Mover(width/2 + 150, 250, 6, color(240, 200, 30)); // Amarillo
+  
+  piezas.push(p1, p2, p3);
+
+  // Creamos los resortes conectando cada pieza a su anclaje
+  // Parámetros Spring: anclaje, longitud de reposo, constante elástica (k)
+  resortes.push(new Spring(anclaje1, 200, 0.05));
+  resortes.push(new Spring(anclaje2, 250, 0.02)); // Resorte más largo y suave
+  resortes.push(new Spring(anclaje3, 150, 0.1));  // Resorte rígido y corto
+}
+
+function draw() {
+  background(245, 240, 235); // Fondo de galería de arte
+
+  // Calcular el viento usando Perlin Noise
+  // Esto le da el movimiento orgánico característico de un móvil
+  let nx = noise(frameCount * 0.005) - 0.5; // Valores entre -0.5 y 0.5
+  let viento = createVector(nx * 0.5, 0);
+
+  for (let i = 0; i < piezas.length; i++) {
+    let pieza = piezas[i];
+    let resorte = resortes[i];
+
+    // FUERZA 1: Gravedad
+    let gravedad = createVector(0, 0.2 * pieza.masa);
+    pieza.aplicarFuerza(gravedad);
+
+    // FUERZA 2: Viento (Ruido de Perlin)
+    pieza.aplicarFuerza(viento);
+
+    // FUERZA 3: Tensión del resorte (Ley de Hooke)
+    resorte.conectar(pieza);
+
+    // FUERZA 4: Fricción del aire (para que no reboten infinitamente)
+    let friccion = pieza.vel.copy();
+    friccion.normalize();
+    friccion.mult(-1);
+    friccion.setMag(0.05); // Resistencia del aire de la galería
+    pieza.aplicarFuerza(friccion);
+
+    // Mostrar todo
+    resorte.mostrarLineas(pieza);
+    pieza.actualizar();
+    pieza.mostrar(i);
+  }
+}
+
+// --- CLASES DEL MARCO MOTION 101 ---
+
+class Spring {
+  constructor(anclaje, longitud, k) {
+    this.anclaje = anclaje;
+    this.restLength = longitud;
+    this.k = k; // Constante del resorte (rigidez)
+  }
+
+  conectar(mover) {
+    // Ley de Hooke: F = -k * x
+    let fuerza = p5.Vector.sub(mover.pos, this.anclaje);
+    let d = fuerza.mag();
+    let estiramiento = d - this.restLength;
+
+    fuerza.normalize();
+    fuerza.mult(-1 * this.k * estiramiento); // Empujar o jalar dependiendo del estiramiento
+    
+    mover.aplicarFuerza(fuerza);
+  }
+
+  mostrarLineas(mover) {
+    stroke(50);
+    strokeWeight(1.5);
+    line(mover.pos.x, mover.pos.y, this.anclaje.x, this.anclaje.y);
+    // Dibujar el punto de anclaje
+    fill(50);
+    noStroke();
+    circle(this.anclaje.x, this.anclaje.y, 8);
+  }
+}
+
+class Mover {
+  constructor(x, y, m, c) {
+    this.pos = createVector(x, y);
+    this.vel = createVector(0, 0);
+    this.acc = createVector(0, 0);
+    this.masa = m;
+    this.color = c;
+  }
+
+  aplicarFuerza(fuerza) {
+    let f = p5.Vector.div(fuerza, this.masa);
+    this.acc.add(f);
+  }
+
+  actualizar() {
+    this.vel.add(this.acc);
+    this.pos.add(this.vel);
+    this.acc.mult(0);
+  }
+
+  mostrar(index) {
+    fill(this.color);
+    noStroke();
+    
+    // Dibujamos diferentes formas geométricas para emular a Calder
+    push();
+    translate(this.pos.x, this.pos.y);
+    if (index === 0) {
+      ellipse(0, 0, this.masa * 16, this.masa * 12); // Óvalo
+    } else if (index === 1) {
+      triangle(-this.masa*8, this.masa*8, 0, -this.masa*10, this.masa*8, this.masa*8); // Triángulo
+    } else {
+      circle(0, 0, this.masa * 15); // Círculo
+    }
+    pop();
+  }
+}
+````
 
 
 
