@@ -53,11 +53,10 @@ function setup() {
 function draw() {
   background(240);
   
-  // Ejecutamos los métodos de nuestro vehículo en orden
-  vehiculo.controlar();     // 1. Leer el teclado
-  vehiculo.actualizar();    // 2. Aplicar las matemáticas (Motion 101)
-  vehiculo.revisarBordes(); // 3. Hacer que aparezca por el otro lado si sale de la pantalla
-  vehiculo.mostrar();       // 4. Dibujar en pantalla
+  vehiculo.controlar();   
+  vehiculo.actualizar();    
+  vehiculo.revisarBordes(); 
+  vehiculo.mostrar();       
 }
 
 // --- CLASE VEHÍCULO ---
@@ -66,10 +65,9 @@ class Vehiculo {
     this.posicion = createVector(x, y);
     this.velocidad = createVector(0, 0);
     this.aceleracion = createVector(0, 0);
-    this.velocidadMaxima = 6; // Límite para que no se vuelva incontrolable
+    this.velocidadMaxima = 6; 
   }
 
-  // Detecta las flechas del teclado y aplica una fuerza de aceleración
   controlar() {
     let fuerza = createVector(0, 0);
     
@@ -85,8 +83,6 @@ class Vehiculo {
     if (keyIsDown(DOWN_ARROW)) {
       fuerza.y = 0.3;  // Acelera hacia abajo
     }
-    
-    // Sumamos la fuerza del teclado a la aceleración actual
     this.aceleracion.add(fuerza);
   }
 
@@ -95,34 +91,26 @@ class Vehiculo {
     this.velocidad.add(this.aceleracion);
     this.velocidad.limit(this.velocidadMaxima);
     this.posicion.add(this.velocidad);
-    
-    // Si no estamos presionando ninguna tecla, aplicamos una "fricción"
-    // para que la nave se detenga suavemente (opcional pero se siente mejor)
     this.velocidad.mult(0.98); 
     
-    this.aceleracion.mult(0); // Reseteo obligatorio en cada frame
+    this.aceleracion.mult(0); 
   }
 
   mostrar() {
-    // Magia de la trigonometría: heading() calcula el ángulo de la velocidad
     let angulo = this.velocidad.heading();
 
-    push(); // Guardamos el estado del canvas
-    translate(this.posicion.x, this.posicion.y); // Nos movemos a la posición de la nave
-    rotate(angulo); // Rotamos el canvas según la dirección del movimiento
+    push(); 
+    translate(this.posicion.x, this.posicion.y);
+    rotate(angulo); 
     
     fill(50, 150, 255);
     stroke(0);
     strokeWeight(2);
-    
-    // Dibujamos un triángulo apuntando hacia la derecha (0 radianes)
-    // Coordenadas: (Punta trasera arriba), (Punta delantera), (Punta trasera abajo)
     triangle(-15, -10, 15, 0, -15, 10); 
     
-    pop(); // Restauramos el canvas
+    pop();
   }
 
-  // Efecto Pac-Man: Si sale por un borde, entra por el opuesto
   revisarBordes() {
     if (this.posicion.x > width + 15) this.posicion.x = -15;
     if (this.posicion.x < -15) this.posicion.x = width + 15;
@@ -149,24 +137,20 @@ let attractor;
 function setup() {
   createCanvas(640, 360);
   
-  // Creamos varios "Movers" (los elementos que son atraídos)
   for (let i = 0; i < 10; i++) {
     movers[i] = new Mover(random(width), random(height), random(0.5, 3));
   }
-  
-  // Instanciamos el atractor en el centro
+
   attractor = new Attractor();
 }
 
 function draw() {
   background(240);
 
-  // 1. Verificamos la interacción del mouse con el atractor
   attractor.verificarHover(mouseX, mouseY);
   attractor.arrastrar(mouseX, mouseY);
   attractor.mostrar();
 
-  // 2. Aplicamos la fuerza de atracción a cada mover
   for (let i = 0; i < movers.length; i++) {
     let force = attractor.atraer(movers[i]);
     movers[i].aplicarFuerza(force);
@@ -175,8 +159,6 @@ function draw() {
   }
 }
 
-// --- FUNCIONES NATIVAS DE P5.JS PARA EL MOUSE ---
-// Estas funciones se activan automáticamente cuando haces clic o sueltas el mouse
 function mousePressed() {
   attractor.presionarClic(mouseX, mouseY);
 }
@@ -185,10 +167,6 @@ function mouseReleased() {
   attractor.soltarClic();
 }
 
-
-// ==========================================
-// CLASE ATTRACTOR (El núcleo interactivo)
-// ==========================================
 class Attractor {
   constructor() {
     this.posicion = createVector(width / 2, height / 2);
@@ -215,8 +193,7 @@ class Attractor {
     ellipseMode(CENTER);
     strokeWeight(4);
     stroke(0);
-    
-    // Aquí cambiamos el color dependiendo del estado (Respuesta a la Actividad)
+
     if (this.dragging) {
       fill(50); // Gris muy oscuro si lo estoy arrastrando
     } else if (this.rollover) {
@@ -227,8 +204,6 @@ class Attractor {
     
     circle(this.posicion.x, this.posicion.y, this.masa * 2);
   }
-
-  // --- MÉTODOS DE INTERACCIÓN ---
 
   // Verifica si el mouse está sobre el círculo
   verificarHover(mx, my) {
@@ -244,8 +219,6 @@ class Attractor {
   presionarClic(mx, my) {
     if (this.rollover) {
       this.dragging = true;
-      // Guardamos la diferencia entre donde hice clic y el centro real del círculo
-      // para que al arrastrarlo no "salte" al cursor bruscamente
       this.offsetArrastre.x = this.posicion.x - mx;
       this.offsetArrastre.y = this.posicion.y - my;
     }
@@ -265,10 +238,6 @@ class Attractor {
   }
 }
 
-
-// ==========================================
-// CLASE MOVER (El marco Motion 101)
-// ==========================================
 class Mover {
   constructor(x, y, m) {
     this.masa = m;
@@ -286,9 +255,6 @@ class Mover {
   actualizar() {
     this.velocidad.add(this.aceleracion);
     this.posicion.add(this.velocidad);
-    
-    // RESPUESTA A LA ACTIVIDAD: Modificación vital de Motion 101
-    // Sin esto, la aceleración se sumaría infinitamente en cada frame
     this.aceleracion.mult(0); 
   }
 
@@ -370,5 +336,6 @@ Documenta en tu bitácora de aprendizaje el proceso de modificación de la simul
 Documenta tu diagrama conceptual en tu bitácora de aprendizaje.
 
 ##  Solución
+
 
 
