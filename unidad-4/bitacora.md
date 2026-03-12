@@ -274,6 +274,35 @@ Documenta en tu bitácora de aprendizaje las respuestas a las preguntas anterior
 
 ##  Solución
 
+```c
+Codigo del ejercicio
+
+let r = 120;    
+let theta = 0;   
+
+function setup() {
+  createCanvas(640, 360);
+}
+
+function draw() {
+  background(240);
+  
+  translate(width / 2, height / 2);
+  
+  let v = p5.Vector.fromAngle(theta, r);
+  
+  fill(50, 150, 255); // Azul para que se vea mejor
+  stroke(0);
+  strokeWeight(2);
+  
+  line(0, 0, v.x, v.y);
+  
+  circle(v.x, v.y, 48);
+
+  theta += 0.02;
+}
+
+```
 #### Acividad 6
 
 #### Enunciado
@@ -282,6 +311,61 @@ Documenta tus reflexiones sobre la función sinusoide en tu bitácora de aprendi
 
 ##  Solución
 
+Codigo de la actividad
+
+```c
+let sliderAmplitud, sliderPeriodo, sliderFase;
+
+function setup() {
+  createCanvas(640, 360);
+  
+  sliderAmplitud = createSlider(0, 300, 150, 1);
+  sliderAmplitud.position(20, 380);
+  
+  sliderPeriodo = createSlider(10, 300, 120, 1);
+  sliderPeriodo.position(20, 420);
+  
+  sliderFase = createSlider(0, TWO_PI, 0, 0.01);
+  sliderFase.position(20, 460);
+}
+
+function draw() {
+  background(240);
+  
+  let amplitud = sliderAmplitud.value();
+  let periodo = sliderPeriodo.value();
+  let fase = sliderFase.value();
+  
+  let tiempo = frameCount;
+  let x1 = amplitud * sin((TWO_PI * tiempo) / periodo);           
+  let x2 = amplitud * sin(((TWO_PI * tiempo) / periodo) + fase);  
+  fill(0);
+  noStroke();
+  textSize(16);
+  textAlign(LEFT, TOP);
+  text("Amplitud (A): " + amplitud, 160, 380 - height); 
+  text("Periodo (T): " + periodo + " frames", 160, 420 - height);
+  text("Fase (φ): " + fase.toFixed(2) + " radianes", 160, 460 - height);
+
+  translate(width / 2, height / 2);
+
+  stroke(150);
+  strokeWeight(2);
+  fill(200);
+  line(0, -60, x1, -60);
+  circle(x1, -60, 40);
+  
+  stroke(0);
+  fill(50, 150, 255);
+  line(0, 20, x2, 20);
+  circle(x2, 20, 48);
+
+  stroke(255, 0, 0, 100);
+  strokeWeight(1);
+  line(0, -100, 0, 100);
+}
+```
+
 #### Acividad 7
 
 #### Enunciado
@@ -289,6 +373,81 @@ Documenta tus reflexiones sobre la función sinusoide en tu bitácora de aprendi
 Documenta en tu bitácora de aprendizaje el proceso de modificación de la simulación.
 
 ##  Solución
+
+Codigo del oscillator
+
+```c
+class Oscillator {
+  constructor() {
+    this.angle = createVector();
+    this.angleVelocity = createVector(0, 0); 
+    this.angleAcceleration = createVector(0, 0); 
+    this.amplitude = createVector(
+      random(20, width / 2),
+      random(20, height / 2)
+    );
+    
+    this.mass = random(1, 4);
+  }
+  applyForce(force) {
+    let f = p5.Vector.div(force, this.mass);
+    this.angleAcceleration.add(f);
+  }
+
+  update() {
+    this.angleVelocity.add(this.angleAcceleration);
+    this.angleVelocity.limit(0.1); 
+    this.angle.add(this.angleVelocity);
+    this.angleAcceleration.mult(0);
+  }
+
+  show() {
+    let x = sin(this.angle.x) * this.amplitude.x;
+    let y = sin(this.angle.y) * this.amplitude.y;
+
+    push();
+    translate(width / 2, height / 2);
+    stroke(0);
+    strokeWeight(2);
+    fill(127, 150);
+    line(0, 0, x, y);
+    circle(x, y, 32);
+    pop();
+  }
+}
+```
+
+Codigo en el sketch
+
+```c
+let oscillators = [];
+let tOffset = 0;
+
+function setup() {
+  createCanvas(640, 240);
+  for (let i = 0; i < 10; i++) {
+    oscillators.push(new Oscillator());
+  }
+}
+
+function draw() {
+  background(255);
+  let nX = noise(tOffset);
+  let nY = noise(tOffset + 1000); 
+  let forceX = map(nX, 0, 1, -0.005, 0.005);
+  let forceY = map(nY, 0, 1, -0.005, 0.005);
+  let windForce = createVector(forceX, forceY);
+
+  tOffset += 0.01; // Avanzamos el tiempo en el espacio de Perlin
+
+  for (let i = 0; i < oscillators.length; i++) {
+    oscillators[i].applyForce(windForce);
+    
+    oscillators[i].update();
+    oscillators[i].show();
+  }
+}
+```
 
 #### Acividad 8  
 
@@ -336,6 +495,7 @@ Documenta en tu bitácora de aprendizaje el proceso de modificación de la simul
 Documenta tu diagrama conceptual en tu bitácora de aprendizaje.
 
 ##  Solución
+
 
 
 
