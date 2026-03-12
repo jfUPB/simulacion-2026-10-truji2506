@@ -601,6 +601,97 @@ Documenta en tu bitácora de aprendizaje el proceso de modificación de la simul
 
 ##  Solución
 
+Codigo de la actividad 
+
+sketch.js
+```c
+let p1, p2;
+
+function setup() {
+  createCanvas(640, 480);
+  p1 = new Pendulum(width / 2, 10, 150);
+  p2 = new Pendulum(width / 2, 160, 150);
+}
+
+function draw() {
+  background(240);
+  
+  p1.update();
+  p1.drag();
+  p2.pivot.x = p1.bob.x;
+  p2.pivot.y = p1.bob.y;
+  p2.update();
+  p2.drag(); 
+  p1.show();
+  p2.show();
+}
+
+function mousePressed() {
+  p1.clicked(mouseX, mouseY);
+  p2.clicked(mouseX, mouseY);
+}
+
+function mouseReleased() {
+  p1.stopDragging();
+  p2.stopDragging();
+}
+```
+
+pendulum.js
+```c
+class Pendulum {
+  constructor(x, y, r) {
+    this.pivot = createVector(x, y);
+    this.bob = createVector();
+    this.r = r;
+    this.angle = PI / 4; 
+    this.angleVelocity = 0.0;
+    this.angleAcceleration = 0.0;
+    this.damping = 0.995; 
+    this.ballr = 20.0; 
+  }
+
+  update() {
+    if (!this.dragging) {
+      let gravity = 0.4; 
+      this.angleAcceleration = ((-1 * gravity) / this.r) * sin(this.angle);
+      this.angleVelocity += this.angleAcceleration; 
+      this.angle += this.angleVelocity; 
+      this.angleVelocity *= this.damping; 
+    }
+    this.bob.set(this.r * sin(this.angle), this.r * cos(this.angle), 0); 
+    this.bob.add(this.pivot); 
+  }
+
+  show() {
+    stroke(0);
+    strokeWeight(2);
+    // Dibujar el brazo
+    line(this.pivot.x, this.pivot.y, this.bob.x, this.bob.y);
+    fill(50, 150, 255); 
+    circle(this.bob.x, this.bob.y, this.ballr * 2);
+  }
+  clicked(mx, my) {
+    let d = dist(mx, my, this.bob.x, this.bob.y);
+    if (d < this.ballr) {
+      this.dragging = true;
+    }
+  }
+
+  stopDragging() {
+    this.angleVelocity = 0; 
+    this.dragging = false;
+  }
+
+  drag() {
+    if (this.dragging) {
+      let diff = p5.Vector.sub(this.pivot, createVector(mouseX, mouseY)); 
+      this.angle = atan2(-1 * diff.y, diff.x) - radians(90); 
+    }
+  }
+}
+```
+
 ## Bitácora de aplicación 
 
 #### Acividad 11  
@@ -614,6 +705,108 @@ Documenta en tu bitácora de aprendizaje el proceso de modificación de la simul
 
 ##  Solución
 
+1. La obra representa las antiguas runas de Midgard cayendo suavemente como copos de nieve mágica. La narrativa dicta las siguientes reglas para el sistema generativo
+
+Gravedad: todas las runas tienen una masa, siendo jaladas constantemente hacia el fondo del lienzo.
+
+Ruido de Perlin: para simular los vientos organicos, se aplica una fuerza lateral generada por Ruido de Perlin. Esto evita que caigan en linea recta, dandoles un movimiento fluido y natural.
+
+Direccion: Al restar la posición del click a la posición de la runa, se traza un flecha invisible que apunta exactamente desde el curso hacia la runa.
+
+Distancia: utilizo el metodo mag() para medir que tan ancho es el circulo de "Explosion" y esto hace que la runa que este dentro de la explosión se empuje
+
+2. Codigo de la aplicación
+
+```c
+let runas = [];
+let tOffset = 0;
+const caracteres = "ᚠᚢᚦᚬᚱᚴᚼᚽᚾᛅᛋᛏᛒᛘᛚᛦ";
+
+function setup() {
+  createCanvas(800, 600);
+  for (let i = 0; i < 40; i++) {
+    runas.push(new Runa(random(width), random(height), random(1, 3)));
+  }
+}
+
+function draw() {
+  background(15, 20, 30); // Fondo azul muy oscuro
+  let vientoX = map(noise(tOffset), 0, 1, -0.05, 0.05);
+  let viento = createVector(vientoX, 0);
+  tOffset += 0.01;
+  let gravedad = createVector(0, 0.03);
+
+  for (let r of runas) {
+    r.aplicarFuerza(viento);
+    r.aplicarFuerza(gravedad);
+    if (mouseIsPressed) {
+      let fuerzaMouse = p5.Vector.sub(r.pos, createVector(mouseX, mouseY));
+      let distancia = fuerzaMouse.mag();
+      if (distancia < 50) {
+        fuerzaMouse.normalize();
+        fuerzaMouse.mult(2); // Empuje fuerte
+        r.aplicarFuerza(fuerzaMouse);
+      }
+      noFill();
+      stroke(0, 200, 255, 30);
+      strokeWeight(2);
+      circle(mouseX, mouseY, 50); // 300 de diámetro = 150 de radio
+    }
+    r.actualizar();
+    r.revisarBordes();
+    r.mostrar();
+  }
+}
+class Runa {
+  constructor(x, y, m) {
+    this.pos = createVector(x, y);
+    this.vel = createVector(0, 0);
+    this.acc = createVector(0, 0);
+    this.masa = m;
+    this.simbolo = caracteres.charAt(floor(random(caracteres.length)));
+  }
+  aplicarFuerza(fuerza) {
+    let f = p5.Vector.div(fuerza, this.masa);
+    this.acc.add(f);
+  }
+  actualizar() {
+    this.vel.add(this.acc);
+    this.vel.limit(6); // Límite de velocidad máxima
+    this.pos.add(this.vel);
+    this.acc.mult(0); 
+  }
+  revisarBordes() {
+    if (this.pos.y > height + 30) {
+      this.pos.y = -30;
+      this.pos.x = random(width);
+      this.vel.mult(0);
+    }
+    if (this.pos.x > width + 30) this.pos.x = -30;
+    if (this.pos.x < -30) this.pos.x = width + 30;
+  }
+
+  mostrar() {
+    drawingContext.shadowBlur = 15;
+    drawingContext.shadowColor = color(0, 200, 255);
+    fill(180, 240, 255);
+    noStroke();
+    textSize(this.masa * 12);
+    textAlign(CENTER, CENTER);
+    text(this.simbolo, this.pos.x, this.pos.y);
+    drawingContext.shadowBlur = 0;
+  }
+}
+```
+
+3. Enlace del proyecto
+
+[https://editor.p5js.org/truji2506/sketches/rHXEMRLS5u](https://editor.p5js.org/truji2506/sketches/rHXEMRLS5u)
+
+4. Capturas de pantalla de la obra generativa
+
+<img width="791" height="591" alt="image" src="https://github.com/user-attachments/assets/002d5ebb-5cee-491a-9010-de068e0b6e39" />
+
+
 ## Bitácora de reflexión
 
 #### Acividad 12  
@@ -623,6 +816,7 @@ Documenta en tu bitácora de aprendizaje el proceso de modificación de la simul
 Documenta tu diagrama conceptual en tu bitácora de aprendizaje.
 
 ##  Solución
+
 
 
 
