@@ -457,6 +457,34 @@ Documenta en tu bitácora de aprendizaje el proceso de modificación de la simul
 
 ##  Solución
 
+Codigo de la actividad
+
+```c
+let startAngle = 0; 
+let angleVelocity = 0.2;
+let amplitude = 100;
+
+function setup() {
+  createCanvas(640, 240);
+}
+
+function draw() {
+  background(255);
+
+  stroke(0);
+  strokeWeight(2);
+  fill(127, 127); // Gris con un poco de transparencia
+  let angle = startAngle;
+
+  for (let x = 0; x <= width; x += 24) {
+    let y = amplitude * sin(angle);
+    circle(x, y + height / 2, 48);
+    angle += angleVelocity;
+  }
+  startAngle += 0.05; 
+}
+```
+
 #### Acividad 9  
 
 #### Enunciado
@@ -465,6 +493,106 @@ Documenta en tu bitácora de aprendizaje el proceso de modificación de la simul
 
 ##  Solución
 
+Codigo del sketch
+
+```c
+let bob1, bob2;
+let spring1, spring2;
+
+function setup() {
+  createCanvas(640, 480); 
+  spring1 = new Spring(width / 2, 10, 100);
+  bob1 = new Bob(width / 2, 110);
+  spring2 = new Spring(width / 2, 110, 100);
+  bob2 = new Bob(width / 2, 210);
+}
+
+function draw() {
+  background(255);
+  let gravity = createVector(0, 2);
+  bob1.applyForce(gravity);
+  bob2.applyForce(gravity);
+  bob1.update();
+  bob2.update();
+  bob2.handleDrag(mouseX, mouseY);
+  spring1.connect(bob1);
+  spring2.connect(bob2, bob1);
+  spring1.constrainLength(bob1, 30, 200);
+  spring2.constrainLength(bob2, 30, 200, bob1);
+  spring1.showLine(bob1);
+  spring2.showLine(bob2);
+  bob1.show();
+  bob2.show();
+  spring1.show(); // Solo dibujamos el anclaje del resorte 1 porque el 2 no tiene un techo fijo
+}
+
+function mousePressed() {
+  bob2.handleClick(mouseX, mouseY);
+}
+
+function mouseReleased() {
+  bob2.stopDragging();
+}
+```
+
+Codigo del spring.js 
+
+```c
+class Spring {
+  constructor(x, y, length) {
+    this.anchor = createVector(x, y);
+    this.restLength = length;
+    this.k = 0.2; // Constante elástica
+  }
+  connect(bob, parentBob = null) {
+    if (parentBob != null) {
+      this.anchor.x = parentBob.position.x;
+      this.anchor.y = parentBob.position.y;
+    }
+
+    let force = p5.Vector.sub(bob.position, this.anchor);
+    let currentLength = force.mag();
+    let stretch = currentLength - this.restLength;
+    force.setMag(-1 * this.k * stretch);
+    bob.applyForce(force);
+    if (parentBob != null) {
+      let oppositeForce = force.copy();
+      oppositeForce.mult(-1); // Invertimos la dirección de la fuerza
+      parentBob.applyForce(oppositeForce);
+    }
+  }
+
+  constrainLength(bob, minlen, maxlen, parentBob = null) {
+    if (parentBob != null) {
+      this.anchor.x = parentBob.position.x;
+      this.anchor.y = parentBob.position.y;
+    }
+
+    let direction = p5.Vector.sub(bob.position, this.anchor);
+    let length = direction.mag();
+
+    if (length < minlen) {
+      direction.setMag(minlen);
+      bob.position = p5.Vector.add(this.anchor, direction);
+      bob.velocity.mult(0);
+    } else if (length > maxlen) {
+      direction.setMag(maxlen);
+      bob.position = p5.Vector.add(this.anchor, direction);
+      bob.velocity.mult(0);
+    }
+  }
+
+  show() {
+    fill(127);
+    circle(this.anchor.x, this.anchor.y, 10);
+  }
+
+  showLine(bob) {
+    stroke(0);
+    line(bob.position.x, bob.position.y, this.anchor.x, this.anchor.y);
+  }
+}
+```
 #### Acividad 10 
 
 #### Enunciado
@@ -495,6 +623,7 @@ Documenta en tu bitácora de aprendizaje el proceso de modificación de la simul
 Documenta tu diagrama conceptual en tu bitácora de aprendizaje.
 
 ##  Solución
+
 
 
 
