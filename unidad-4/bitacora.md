@@ -2,8 +2,824 @@
 
 ## Bitácora de proceso de aprendizaje
 
+#### Acividad 1
+
+#### Enunciado
+
+Documenta en tu bitácora de aprendizaje los aspectos que más te llamaron la atención de la obra de Memo.
+
+##  Solución
+
+Utiliza la función sinusoide básica, pero al desfasar múltiples formas y superponerlas, elimina la sensación de que estamos viendo una simulación. La obra respira y fluye, demostrando que el diseño, la repetición operativa genera resultados organicos.
+
+#### Acividad 2
+
+#### Enunciado
+
+Documenta en tu bitácora de aprendizaje las respuestas a las preguntas anteriores.
+
+##  Solución
+
+¿Qué pasa en la simulación y el origen (0,0)? 
+
+El punto (0,0) está en la esquina superior izquierda. Al usar translate(width/2, height/2), movemos ese papel virtual para que el centro de la pantalla sea el nuevo (0,0). Hacemos esto porque la función rotate() siempre gira todo el lienzo alrededor del origen. Si dibujamos las figuras en (0,0) después de trasladar el lienzo, las figuras girarán perfectamente sobre su propio centro, como una rueda.
+
+¿Qué hace heading()? 
+
+Calcula el ángulo de rotación de un vector en radianes. Matemáticamente, resuelve el ángulo usando $\theta = \arctan(y / x)$ basándose en la velocidad actual.¿Qué hacen push() y pop()? Son salvavidas. push() guarda el estado actual del sistema de coordenadas, y pop() lo restaura. Sin ellos, si rotas un cuadrado 45 grados, el siguiente elemento que dibujes también saldrá rotado. Aislan las transformaciones.
+
+¿Qué hace rectMode(CENTER)? 
+
+Cambia el punto de anclaje de un rectángulo. En lugar de dibujarse desde la esquina superior izquierda, se dibuja desde su centro exacto, vital para que la rotación se vea natural.
+
+#### Acividad 3
+
+#### Enunciado
+
+Documenta en tu bitácora de aprendizaje tu proceso de creación de la simulación.
+
+##  Solución
+
+Codigo del ejercicio 
+
+```c
+let vehiculo;
+
+function setup() {
+  createCanvas(600, 400);
+  vehiculo = new Vehiculo(width / 2, height / 2);
+}
+
+function draw() {
+  background(240);
+  
+  vehiculo.controlar();   
+  vehiculo.actualizar();    
+  vehiculo.revisarBordes(); 
+  vehiculo.mostrar();       
+}
+
+// --- CLASE VEHÍCULO ---
+class Vehiculo {
+  constructor(x, y) {
+    this.posicion = createVector(x, y);
+    this.velocidad = createVector(0, 0);
+    this.aceleracion = createVector(0, 0);
+    this.velocidadMaxima = 6; 
+  }
+
+  controlar() {
+    let fuerza = createVector(0, 0);
+    
+    if (keyIsDown(LEFT_ARROW)) {
+      fuerza.x = -0.3; // Acelera a la izquierda
+    }
+    if (keyIsDown(RIGHT_ARROW)) {
+      fuerza.x = 0.3;  // Acelera a la derecha
+    }
+    if (keyIsDown(UP_ARROW)) {
+      fuerza.y = -0.3; // Acelera hacia arriba
+    }
+    if (keyIsDown(DOWN_ARROW)) {
+      fuerza.y = 0.3;  // Acelera hacia abajo
+    }
+    this.aceleracion.add(fuerza);
+  }
+
+  // El corazón de Motion 101
+  actualizar() {
+    this.velocidad.add(this.aceleracion);
+    this.velocidad.limit(this.velocidadMaxima);
+    this.posicion.add(this.velocidad);
+    this.velocidad.mult(0.98); 
+    
+    this.aceleracion.mult(0); 
+  }
+
+  mostrar() {
+    let angulo = this.velocidad.heading();
+
+    push(); 
+    translate(this.posicion.x, this.posicion.y);
+    rotate(angulo); 
+    
+    fill(50, 150, 255);
+    stroke(0);
+    strokeWeight(2);
+    triangle(-15, -10, 15, 0, -15, 10); 
+    
+    pop();
+  }
+
+  revisarBordes() {
+    if (this.posicion.x > width + 15) this.posicion.x = -15;
+    if (this.posicion.x < -15) this.posicion.x = width + 15;
+    if (this.posicion.y > height + 15) this.posicion.y = -15;
+    if (this.posicion.y < -15) this.posicion.y = height + 15;
+  }
+}
+```
+
+#### Acividad 4
+
+#### Enunciado
+
+Documenta en tu bitácora de aprendizaje las respuestas a las preguntas anteriores.
+
+##  Solución
+
+Codigo del ejercicio
+
+```c
+let movers = [];
+let attractor;
+
+function setup() {
+  createCanvas(640, 360);
+  
+  for (let i = 0; i < 10; i++) {
+    movers[i] = new Mover(random(width), random(height), random(0.5, 3));
+  }
+
+  attractor = new Attractor();
+}
+
+function draw() {
+  background(240);
+
+  attractor.verificarHover(mouseX, mouseY);
+  attractor.arrastrar(mouseX, mouseY);
+  attractor.mostrar();
+
+  for (let i = 0; i < movers.length; i++) {
+    let force = attractor.atraer(movers[i]);
+    movers[i].aplicarFuerza(force);
+    movers[i].actualizar();
+    movers[i].mostrar();
+  }
+}
+
+function mousePressed() {
+  attractor.presionarClic(mouseX, mouseY);
+}
+
+function mouseReleased() {
+  attractor.soltarClic();
+}
+
+class Attractor {
+  constructor() {
+    this.posicion = createVector(width / 2, height / 2);
+    this.masa = 20;
+    this.G = 1; // Constante gravitacional
+    
+    // Variables para la interacción
+    this.offsetArrastre = createVector(0, 0);
+    this.dragging = false; // ¿Lo estoy arrastrando?
+    this.rollover = false; // ¿Tengo el mouse encima?
+  }
+
+  atraer(mover) {
+    let fuerza = p5.Vector.sub(this.posicion, mover.posicion);
+    let d = fuerza.mag();
+    d = constrain(d, 5, 25);
+    fuerza.normalize();
+    let magnitudFuerza = (this.G * this.masa * mover.masa) / (d * d);
+    fuerza.mult(magnitudFuerza);
+    return fuerza;
+  }
+
+  mostrar() {
+    ellipseMode(CENTER);
+    strokeWeight(4);
+    stroke(0);
+
+    if (this.dragging) {
+      fill(50); // Gris muy oscuro si lo estoy arrastrando
+    } else if (this.rollover) {
+      fill(100); // Gris medio si solo tengo el cursor encima
+    } else {
+      fill(175, 200); // Gris claro por defecto
+    }
+    
+    circle(this.posicion.x, this.posicion.y, this.masa * 2);
+  }
+
+  // Verifica si el mouse está sobre el círculo
+  verificarHover(mx, my) {
+    let d = dist(mx, my, this.posicion.x, this.posicion.y);
+    if (d < this.masa) {
+      this.rollover = true;
+    } else {
+      this.rollover = false;
+    }
+  }
+
+  // Se activa desde mousePressed()
+  presionarClic(mx, my) {
+    if (this.rollover) {
+      this.dragging = true;
+      this.offsetArrastre.x = this.posicion.x - mx;
+      this.offsetArrastre.y = this.posicion.y - my;
+    }
+  }
+
+  // Se activa constantemente en el draw() si dragging es true
+  arrastrar(mx, my) {
+    if (this.dragging) {
+      this.posicion.x = mx + this.offsetArrastre.x;
+      this.posicion.y = my + this.offsetArrastre.y;
+    }
+  }
+
+  // Se activa desde mouseReleased()
+  soltarClic() {
+    this.dragging = false;
+  }
+}
+
+class Mover {
+  constructor(x, y, m) {
+    this.masa = m;
+    this.posicion = createVector(x, y);
+    this.velocidad = createVector(0, 0);
+    this.aceleracion = createVector(0, 0);
+  }
+
+  aplicarFuerza(fuerza) {
+    // a = F / m
+    let f = p5.Vector.div(fuerza, this.masa);
+    this.aceleracion.add(f);
+  }
+
+  actualizar() {
+    this.velocidad.add(this.aceleracion);
+    this.posicion.add(this.velocidad);
+    this.aceleracion.mult(0); 
+  }
+
+  mostrar() {
+    stroke(0);
+    strokeWeight(2);
+    fill(0, 150, 255, 150); // Un tono azulado para diferenciarlos del atractor
+    circle(this.posicion.x, this.posicion.y, this.masa * 16);
+  }
+}
+```
+#### Acividad 5  
+
+#### Enunciado
+
+Documenta en tu bitácora de aprendizaje las respuestas a las preguntas anteriores.
+
+##  Solución
+
+```c
+Codigo del ejercicio
+
+let r = 120;    
+let theta = 0;   
+
+function setup() {
+  createCanvas(640, 360);
+}
+
+function draw() {
+  background(240);
+  
+  translate(width / 2, height / 2);
+  
+  let v = p5.Vector.fromAngle(theta, r);
+  
+  fill(50, 150, 255); // Azul para que se vea mejor
+  stroke(0);
+  strokeWeight(2);
+  
+  line(0, 0, v.x, v.y);
+  
+  circle(v.x, v.y, 48);
+
+  theta += 0.02;
+}
+
+```
+#### Acividad 6
+
+#### Enunciado
+
+Documenta tus reflexiones sobre la función sinusoide en tu bitácora de aprendizaje.
+
+##  Solución
+
+Codigo de la actividad
+
+```c
+let sliderAmplitud, sliderPeriodo, sliderFase;
+
+function setup() {
+  createCanvas(640, 360);
+  
+  sliderAmplitud = createSlider(0, 300, 150, 1);
+  sliderAmplitud.position(20, 380);
+  
+  sliderPeriodo = createSlider(10, 300, 120, 1);
+  sliderPeriodo.position(20, 420);
+  
+  sliderFase = createSlider(0, TWO_PI, 0, 0.01);
+  sliderFase.position(20, 460);
+}
+
+function draw() {
+  background(240);
+  
+  let amplitud = sliderAmplitud.value();
+  let periodo = sliderPeriodo.value();
+  let fase = sliderFase.value();
+  
+  let tiempo = frameCount;
+  let x1 = amplitud * sin((TWO_PI * tiempo) / periodo);           
+  let x2 = amplitud * sin(((TWO_PI * tiempo) / periodo) + fase);  
+  fill(0);
+  noStroke();
+  textSize(16);
+  textAlign(LEFT, TOP);
+  text("Amplitud (A): " + amplitud, 160, 380 - height); 
+  text("Periodo (T): " + periodo + " frames", 160, 420 - height);
+  text("Fase (φ): " + fase.toFixed(2) + " radianes", 160, 460 - height);
+
+  translate(width / 2, height / 2);
+
+  stroke(150);
+  strokeWeight(2);
+  fill(200);
+  line(0, -60, x1, -60);
+  circle(x1, -60, 40);
+  
+  stroke(0);
+  fill(50, 150, 255);
+  line(0, 20, x2, 20);
+  circle(x2, 20, 48);
+
+  stroke(255, 0, 0, 100);
+  strokeWeight(1);
+  line(0, -100, 0, 100);
+}
+```
+
+#### Acividad 7
+
+#### Enunciado
+
+Documenta en tu bitácora de aprendizaje el proceso de modificación de la simulación.
+
+##  Solución
+
+Codigo del oscillator
+
+```c
+class Oscillator {
+  constructor() {
+    this.angle = createVector();
+    this.angleVelocity = createVector(0, 0); 
+    this.angleAcceleration = createVector(0, 0); 
+    this.amplitude = createVector(
+      random(20, width / 2),
+      random(20, height / 2)
+    );
+    
+    this.mass = random(1, 4);
+  }
+  applyForce(force) {
+    let f = p5.Vector.div(force, this.mass);
+    this.angleAcceleration.add(f);
+  }
+
+  update() {
+    this.angleVelocity.add(this.angleAcceleration);
+    this.angleVelocity.limit(0.1); 
+    this.angle.add(this.angleVelocity);
+    this.angleAcceleration.mult(0);
+  }
+
+  show() {
+    let x = sin(this.angle.x) * this.amplitude.x;
+    let y = sin(this.angle.y) * this.amplitude.y;
+
+    push();
+    translate(width / 2, height / 2);
+    stroke(0);
+    strokeWeight(2);
+    fill(127, 150);
+    line(0, 0, x, y);
+    circle(x, y, 32);
+    pop();
+  }
+}
+```
+
+Codigo en el sketch
+
+```c
+let oscillators = [];
+let tOffset = 0;
+
+function setup() {
+  createCanvas(640, 240);
+  for (let i = 0; i < 10; i++) {
+    oscillators.push(new Oscillator());
+  }
+}
+
+function draw() {
+  background(255);
+  let nX = noise(tOffset);
+  let nY = noise(tOffset + 1000); 
+  let forceX = map(nX, 0, 1, -0.005, 0.005);
+  let forceY = map(nY, 0, 1, -0.005, 0.005);
+  let windForce = createVector(forceX, forceY);
+
+  tOffset += 0.01; // Avanzamos el tiempo en el espacio de Perlin
+
+  for (let i = 0; i < oscillators.length; i++) {
+    oscillators[i].applyForce(windForce);
+    
+    oscillators[i].update();
+    oscillators[i].show();
+  }
+}
+```
+
+#### Acividad 8  
+
+#### Enunciado
+
+Documenta en tu bitácora de aprendizaje el proceso de modificación de la simulación.
+
+##  Solución
+
+Codigo de la actividad
+
+```c
+let startAngle = 0; 
+let angleVelocity = 0.2;
+let amplitude = 100;
+
+function setup() {
+  createCanvas(640, 240);
+}
+
+function draw() {
+  background(255);
+
+  stroke(0);
+  strokeWeight(2);
+  fill(127, 127); // Gris con un poco de transparencia
+  let angle = startAngle;
+
+  for (let x = 0; x <= width; x += 24) {
+    let y = amplitude * sin(angle);
+    circle(x, y + height / 2, 48);
+    angle += angleVelocity;
+  }
+  startAngle += 0.05; 
+}
+```
+
+#### Acividad 9  
+
+#### Enunciado
+
+Documenta en tu bitácora de aprendizaje el proceso de modificación de la simulación.
+
+##  Solución
+
+Codigo del sketch
+
+```c
+let bob1, bob2;
+let spring1, spring2;
+
+function setup() {
+  createCanvas(640, 480); 
+  spring1 = new Spring(width / 2, 10, 100);
+  bob1 = new Bob(width / 2, 110);
+  spring2 = new Spring(width / 2, 110, 100);
+  bob2 = new Bob(width / 2, 210);
+}
+
+function draw() {
+  background(255);
+  let gravity = createVector(0, 2);
+  bob1.applyForce(gravity);
+  bob2.applyForce(gravity);
+  bob1.update();
+  bob2.update();
+  bob2.handleDrag(mouseX, mouseY);
+  spring1.connect(bob1);
+  spring2.connect(bob2, bob1);
+  spring1.constrainLength(bob1, 30, 200);
+  spring2.constrainLength(bob2, 30, 200, bob1);
+  spring1.showLine(bob1);
+  spring2.showLine(bob2);
+  bob1.show();
+  bob2.show();
+  spring1.show(); // Solo dibujamos el anclaje del resorte 1 porque el 2 no tiene un techo fijo
+}
+
+function mousePressed() {
+  bob2.handleClick(mouseX, mouseY);
+}
+
+function mouseReleased() {
+  bob2.stopDragging();
+}
+```
+
+Codigo del spring.js 
+
+```c
+class Spring {
+  constructor(x, y, length) {
+    this.anchor = createVector(x, y);
+    this.restLength = length;
+    this.k = 0.2; // Constante elástica
+  }
+  connect(bob, parentBob = null) {
+    if (parentBob != null) {
+      this.anchor.x = parentBob.position.x;
+      this.anchor.y = parentBob.position.y;
+    }
+
+    let force = p5.Vector.sub(bob.position, this.anchor);
+    let currentLength = force.mag();
+    let stretch = currentLength - this.restLength;
+    force.setMag(-1 * this.k * stretch);
+    bob.applyForce(force);
+    if (parentBob != null) {
+      let oppositeForce = force.copy();
+      oppositeForce.mult(-1); // Invertimos la dirección de la fuerza
+      parentBob.applyForce(oppositeForce);
+    }
+  }
+
+  constrainLength(bob, minlen, maxlen, parentBob = null) {
+    if (parentBob != null) {
+      this.anchor.x = parentBob.position.x;
+      this.anchor.y = parentBob.position.y;
+    }
+
+    let direction = p5.Vector.sub(bob.position, this.anchor);
+    let length = direction.mag();
+
+    if (length < minlen) {
+      direction.setMag(minlen);
+      bob.position = p5.Vector.add(this.anchor, direction);
+      bob.velocity.mult(0);
+    } else if (length > maxlen) {
+      direction.setMag(maxlen);
+      bob.position = p5.Vector.add(this.anchor, direction);
+      bob.velocity.mult(0);
+    }
+  }
+
+  show() {
+    fill(127);
+    circle(this.anchor.x, this.anchor.y, 10);
+  }
+
+  showLine(bob) {
+    stroke(0);
+    line(bob.position.x, bob.position.y, this.anchor.x, this.anchor.y);
+  }
+}
+```
+#### Acividad 10 
+
+#### Enunciado
+
+Documenta en tu bitácora de aprendizaje el proceso de modificación de la simulación.
+
+##  Solución
+
+Codigo de la actividad 
+
+sketch.js
+```c
+let p1, p2;
+
+function setup() {
+  createCanvas(640, 480);
+  p1 = new Pendulum(width / 2, 10, 150);
+  p2 = new Pendulum(width / 2, 160, 150);
+}
+
+function draw() {
+  background(240);
+  
+  p1.update();
+  p1.drag();
+  p2.pivot.x = p1.bob.x;
+  p2.pivot.y = p1.bob.y;
+  p2.update();
+  p2.drag(); 
+  p1.show();
+  p2.show();
+}
+
+function mousePressed() {
+  p1.clicked(mouseX, mouseY);
+  p2.clicked(mouseX, mouseY);
+}
+
+function mouseReleased() {
+  p1.stopDragging();
+  p2.stopDragging();
+}
+```
+
+pendulum.js
+```c
+class Pendulum {
+  constructor(x, y, r) {
+    this.pivot = createVector(x, y);
+    this.bob = createVector();
+    this.r = r;
+    this.angle = PI / 4; 
+    this.angleVelocity = 0.0;
+    this.angleAcceleration = 0.0;
+    this.damping = 0.995; 
+    this.ballr = 20.0; 
+  }
+
+  update() {
+    if (!this.dragging) {
+      let gravity = 0.4; 
+      this.angleAcceleration = ((-1 * gravity) / this.r) * sin(this.angle);
+      this.angleVelocity += this.angleAcceleration; 
+      this.angle += this.angleVelocity; 
+      this.angleVelocity *= this.damping; 
+    }
+    this.bob.set(this.r * sin(this.angle), this.r * cos(this.angle), 0); 
+    this.bob.add(this.pivot); 
+  }
+
+  show() {
+    stroke(0);
+    strokeWeight(2);
+    // Dibujar el brazo
+    line(this.pivot.x, this.pivot.y, this.bob.x, this.bob.y);
+    fill(50, 150, 255); 
+    circle(this.bob.x, this.bob.y, this.ballr * 2);
+  }
+  clicked(mx, my) {
+    let d = dist(mx, my, this.bob.x, this.bob.y);
+    if (d < this.ballr) {
+      this.dragging = true;
+    }
+  }
+
+  stopDragging() {
+    this.angleVelocity = 0; 
+    this.dragging = false;
+  }
+
+  drag() {
+    if (this.dragging) {
+      let diff = p5.Vector.sub(this.pivot, createVector(mouseX, mouseY)); 
+      this.angle = atan2(-1 * diff.y, diff.x) - radians(90); 
+    }
+  }
+}
+```
 
 ## Bitácora de aplicación 
 
+#### Acividad 11  
+
+#### Enunciado
+
+1. Describe el concepto de tu obra generativa. Recuerda que desde la unidad anterior añadimos la idea de narrativa a la obra generativa, para guiar algunas de las decisiones en la definición de reglas del sistema generativo. PERO OJO, no estamos contando una historia, estamos usando la narrativa como herramienta de diseño para la definición de reglas.
+2. El código de la aplicación.
+3. Un enlace al proyecto en el editor de p5.js.
+4. Selecciona capturas de pantalla representativas de tu pieza de arte generativa.
+
+##  Solución
+
+1. La obra representa las antiguas runas de Midgard cayendo suavemente como copos de nieve mágica. La narrativa dicta las siguientes reglas para el sistema generativo
+
+Gravedad: todas las runas tienen una masa, siendo jaladas constantemente hacia el fondo del lienzo.
+
+Ruido de Perlin: para simular los vientos organicos, se aplica una fuerza lateral generada por Ruido de Perlin. Esto evita que caigan en linea recta, dandoles un movimiento fluido y natural.
+
+Direccion: Al restar la posición del click a la posición de la runa, se traza un flecha invisible que apunta exactamente desde el curso hacia la runa.
+
+Distancia: utilizo el metodo mag() para medir que tan ancho es el circulo de "Explosion" y esto hace que la runa que este dentro de la explosión se empuje
+
+2. Codigo de la aplicación
+
+```c
+let runas = [];
+let tOffset = 0;
+const caracteres = "ᚠᚢᚦᚬᚱᚴᚼᚽᚾᛅᛋᛏᛒᛘᛚᛦ";
+
+function setup() {
+  createCanvas(800, 600);
+  for (let i = 0; i < 40; i++) {
+    runas.push(new Runa(random(width), random(height), random(1, 3)));
+  }
+}
+
+function draw() {
+  background(15, 20, 30); // Fondo azul muy oscuro
+  let vientoX = map(noise(tOffset), 0, 1, -0.05, 0.05);
+  let viento = createVector(vientoX, 0);
+  tOffset += 0.01;
+  let gravedad = createVector(0, 0.03);
+
+  for (let r of runas) {
+    r.aplicarFuerza(viento);
+    r.aplicarFuerza(gravedad);
+    if (mouseIsPressed) {
+      let fuerzaMouse = p5.Vector.sub(r.pos, createVector(mouseX, mouseY));
+      let distancia = fuerzaMouse.mag();
+      if (distancia < 50) {
+        fuerzaMouse.normalize();
+        fuerzaMouse.mult(2); // Empuje fuerte
+        r.aplicarFuerza(fuerzaMouse);
+      }
+      noFill();
+      stroke(0, 200, 255, 30);
+      strokeWeight(2);
+      circle(mouseX, mouseY, 50);
+    }
+    r.actualizar();
+    r.revisarBordes();
+    r.mostrar();
+  }
+}
+class Runa {
+  constructor(x, y, m) {
+    this.pos = createVector(x, y);
+    this.vel = createVector(0, 0);
+    this.acc = createVector(0, 0);
+    this.masa = m;
+    this.simbolo = caracteres.charAt(floor(random(caracteres.length)));
+  }
+  aplicarFuerza(fuerza) {
+    let f = p5.Vector.div(fuerza, this.masa);
+    this.acc.add(f);
+  }
+  actualizar() {
+    this.vel.add(this.acc);
+    this.vel.limit(6); 
+    this.pos.add(this.vel);
+    this.acc.mult(0); 
+  }
+  revisarBordes() {
+    if (this.pos.y > height + 30) {
+      this.pos.y = -30;
+      this.pos.x = random(width);
+      this.vel.mult(0);
+    }
+    if (this.pos.x > width + 30) this.pos.x = -30;
+    if (this.pos.x < -30) this.pos.x = width + 30;
+  }
+
+  mostrar() {
+    drawingContext.shadowBlur = 15;
+    drawingContext.shadowColor = color(0, 200, 255);
+    fill(180, 240, 255);
+    noStroke();
+    textSize(this.masa * 12);
+    textAlign(CENTER, CENTER);
+    text(this.simbolo, this.pos.x, this.pos.y);
+    drawingContext.shadowBlur = 0;
+  }
+}
+```
+
+3. Enlace del proyecto
+
+[https://editor.p5js.org/truji2506/sketches/rHXEMRLS5u](https://editor.p5js.org/truji2506/sketches/rHXEMRLS5u)
+
+4. Capturas de pantalla de la obra generativa
+
+<img width="791" height="591" alt="image" src="https://github.com/user-attachments/assets/002d5ebb-5cee-491a-9010-de068e0b6e39" />
+
 
 ## Bitácora de reflexión
+
+#### Acividad 12  
+
+#### Enunciado
+
+Documenta tu diagrama conceptual en tu bitácora de aprendizaje.
+
+##  Solución
+
+
+
+
+
+
+
