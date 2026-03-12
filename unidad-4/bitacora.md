@@ -750,7 +750,7 @@ function draw() {
       noFill();
       stroke(0, 200, 255, 30);
       strokeWeight(2);
-      circle(mouseX, mouseY, 50); // 300 de diámetro = 150 de radio
+      circle(mouseX, mouseY, 50);
     }
     r.actualizar();
     r.revisarBordes();
@@ -771,7 +771,7 @@ class Runa {
   }
   actualizar() {
     this.vel.add(this.acc);
-    this.vel.limit(6); // Límite de velocidad máxima
+    this.vel.limit(6); 
     this.pos.add(this.vel);
     this.acc.mult(0); 
   }
@@ -816,6 +816,7 @@ class Runa {
 Documenta tu diagrama conceptual en tu bitácora de aprendizaje.
 
 ##  Solución
+
 
 
 
