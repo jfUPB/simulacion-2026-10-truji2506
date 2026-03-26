@@ -177,6 +177,12 @@ Para la modificación que elegiste, responde:
 
 #### Enunciado
 
+Concepto: 2-3 frases sobre qué ciclo de vida representarás y qué emoción o idea quieres comunicar.
+Bocetos: al menos 2 bocetos (pueden ser a mano) que muestren cómo imaginas la pieza antes de programarla.
+Mapa de decisiones: para cada elemento del sistema, explica la decisión de diseño: ¿Por qué esa emisión, esas fuerzas, esa condición de muerte, esa visualización, qué significa la interacción del usuario dentro del concepto?
+Implementación: enlace al código en el editor de p5.js + código fuente en la bitácora.
+Capturas: al menos 3 capturas de momentos diferentes del ciclo de vida.
+
 ##  Solución
 
 ## Bitácora de reflexión
