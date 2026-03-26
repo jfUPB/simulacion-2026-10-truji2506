@@ -185,6 +185,204 @@ Capturas: al menos 3 capturas de momentos diferentes del ciclo de vida.
 
 ##  Solución
 
+#### Concepto 
+
+Esta pieza representa el ciclo de vida natural de una estrella: desde su nacimiento en una nebulosa, su viaje a través del cosmos guiada por fuerzas invisibles, hasta su colapso violento. Quiero comunicar la inmensidad, el paso del tiempo y la belleza destructiva del universo, donde el polvo estelar se condensa para brillar y finalmente estalla en una supernova.
+
+#### Bocetos
+
+1. ![WhatsApp Image 2026-03-26 at 12 38 05 PM (1)](https://github.com/user-attachments/assets/e7ce4ab8-0005-43ae-a77a-242f99030d0d)
+
+2. ![WhatsApp Image 2026-03-26 at 12 38 05 PM](https://github.com/user-attachments/assets/1772febc-8df7-4fb1-96f4-bcf1f050286c)
+
+3. ![WhatsApp Image 2026-03-26 at 12 38 06 PM](https://github.com/user-attachments/assets/0a87ffe1-965c-4f46-a650-98a6680cb2d2)
+
+#### Mapa de decisiones
+
+1. <img width="2816" height="1536" alt="Gemini_Generated_Image_dpeprldpeprldpep" src="https://github.com/user-attachments/assets/1147a429-2f9d-48fa-afc7-d03df2f34f1c" />
+
+#### Implementación 
+
+#### Link del p5.js
+
+https://editor.p5js.org/truji2506/sketches/L4z5OMU38
+
+#### Codigo
+
+````c
+// SIMBIOSIS: PULSO HUMANO Y ALGORITMO (Con Muerte Enfática)
+
+let emitter;
+let zoff = 0; 
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  background(0); 
+  emitter = new Emitter();
+}
+
+function draw() {
+  // Rastro oscuro para acumular las líneas suavemente
+  push();
+  fill(0, 15); 
+  noStroke();
+  rect(0, 0, width, height);
+  pop();
+
+  // INTERACCIÓN HUMANA
+  if (mouseIsPressed) {
+    emitter.addHumanSeed(mouseX, mouseY);
+  }
+
+  // Fuerza de gravedad suave
+  let gravity = createVector(0, 0.05);
+  emitter.applyForce(gravity);
+
+  emitter.run();
+  
+  zoff += 0.01; 
+}
+
+// --- CLASE PADRE ---
+class Particle {
+  constructor(x, y) {
+    this.position = createVector(x, y);
+    this.velocity = createVector(0, 0);
+    this.acceleration = createVector(0, 0);
+    this.lifespan = 255;
+  }
+
+  applyForce(force) {
+    this.acceleration.add(force);
+  }
+
+  update() {
+    this.velocity.add(this.acceleration);
+    this.position.add(this.velocity);
+    this.acceleration.mult(0); 
+  }
+
+  isDead() {
+    return this.lifespan <= 0;
+  }
+}
+
+// --- HIJO 1: LA SEMILLA HUMANA ---
+class HumanSeed extends Particle {
+  constructor(x, y) {
+    super(x, y);
+    this.lifespan = 50; 
+  }
+
+  update() {
+    super.update();
+    this.lifespan -= 5; 
+    
+    // Engendra agentes mecánicos
+    if (random(1) < 0.6) { 
+      emitter.addMachineAgent(this.position.x, this.position.y);
+    }
+  }
+
+  show() {
+    noStroke();
+    fill(255, this.lifespan);
+    circle(this.position.x, this.position.y, 3);
+  }
+}
+
+// --- HIJO 2: EL AGENTE MÁQUINA (Con Muerte Modificada) ---
+class MachineAgent extends Particle {
+  constructor(x, y) {
+    super(x, y);
+    this.velocity = p5.Vector.random2D().mult(random(1, 3));
+    this.prevPos = this.position.copy(); 
+    // Reducimos la vida a 150 para que la muerte ocurra rápido mientras mantienes el clic
+    this.lifespan = 150; 
+  }
+
+  update() {
+    let angle = noise(this.position.x * 0.005, this.position.y * 0.005, zoff) * TWO_PI * 4;
+    let flowForce = p5.Vector.fromAngle(angle);
+    flowForce.mult(0.1); 
+    
+    this.applyForce(flowForce);
+    
+    this.prevPos = this.position.copy();
+    
+    super.update(); 
+    
+    this.velocity.limit(2); 
+    this.lifespan -= 1.5; // Envejece más rápido
+  }
+
+  show() {
+    // CONDICIÓN DE MUERTE VISUAL (Cumpliendo la rúbrica)
+    if (this.lifespan > 15) {
+      // Fase de vida: Asimilación (línea blanca suave)
+      stroke(255, 15); 
+      strokeWeight(1);
+      line(this.prevPos.x, this.prevPos.y, this.position.x, this.position.y);
+    } else {
+      // Fase de muerte: El "Corto Circuito" (últimos 15 frames de vida)
+      // La partícula tiembla y se vuelve roja antes de ser eliminada del array
+      stroke(255, 50, 50, 200); // Rojo brillante glitch
+      strokeWeight(random(2, 4)); // Grosor errático
+      
+      // Le sumamos un random() a la posición solo en el dibujo para que parezca que vibra o falla
+      point(this.position.x + random(-3, 3), this.position.y + random(-3, 3));
+    }
+  }
+}
+
+// --- EL SISTEMA GESTOR ---
+class Emitter {
+  constructor() {
+    this.particles = [];
+  }
+
+  addHumanSeed(x, y) {
+    this.particles.push(new HumanSeed(x, y));
+  }
+
+  addMachineAgent(x, y) {
+    this.particles.push(new MachineAgent(x, y));
+  }
+
+  applyForce(force) {
+    for (let p of this.particles) {
+      p.applyForce(force);
+    }
+  }
+
+  run() {
+    for (let i = this.particles.length - 1; i >= 0; i--) {
+      let p = this.particles[i];
+      p.update();
+      p.show();
+
+      if (p.isDead()) {
+        this.particles.splice(i, 1);
+      }
+    }
+  }
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  background(0);
+}
+````
+
+#### Screen shots del ciclo de vida 
+
+1. <img width="476" height="407" alt="image" src="https://github.com/user-attachments/assets/235b8644-018b-4701-9eb7-bfbe30f7e5e7" />
+
+2. <img width="845" height="690" alt="image" src="https://github.com/user-attachments/assets/d509e5af-7d50-4996-9edc-bb428039876d" />
+
+3. <img width="92" height="82" alt="image" src="https://github.com/user-attachments/assets/8427ac48-481a-402a-8c20-d5393eca3158" />
+
+
 ## Bitácora de reflexión
 
 #### Acividad 6
