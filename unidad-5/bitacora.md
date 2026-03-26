@@ -85,14 +85,91 @@ Hay dos niveles de colección (como carpetas dentro de otras carpetas). El prime
 
 #### Enunciado
 
+📤 Bitácora
+
+¿Qué tienen en común las subclases de partículas? ¿Qué tienen de diferente?
+¿Por qué es importante que el Emitter no necesite saber qué tipo específico de partícula está gestionando? Explica esto con tus propias palabras.
+Si mañana quisieras agregar un tercer tipo de partícula, ¿Qué tendrías que crear y qué NO tendrías que modificar?
+Compara con Example 4.2: ¿Cambió la lógica del Emitter? ¿Cambió la lógica de muerte? ¿Qué capa del sistema se modificó y cuáles permanecieron intactas?
+
 ##  Solución
+
+1. En común: Tanto la partícula normal (el círculo) como el Confetti (el cuadrado) comparten el mismo "motor" y las mismas reglas de vida. Ambas heredan de la clase Particle su forma de moverse (velocidad y aceleración), cómo les afecta la gravedad, y cómo se les va gastando la "barra de salud" (lifespan) hasta morir.
+
+De diferente: Lo único que cambia es su apariencia exterior. La partícula original se dibuja como un círculo simple, mientras que el Confetti sobrescribe esa instrucción (el método show()) para dibujarse como un cuadrado que va girando mientras cae.
+
+2. Imagina que el Emitter es el director de un teatro y las partículas son los actores. El director solo necesita decir la orden "¡Acción!" (llamar al método run()), y cada actor sabe exactamente qué papel le toca interpretar (si debe verse como círculo o como confeti). Si el director tuviera que ir uno por uno diciéndoles "tú eres un círculo, muévete así; tú eres un cuadrado, gira así", se volvería loco. Esta independencia (el polimorfismo) hace que el sistema sea súper eficiente y fácil de manejar.
+
+3. Tendría que crear: Un nuevo archivo con una nueva clase (por ejemplo, class Estrella extends Particle) y escribirle su propio "vestuario" en el método show(). Además, tendrías que ir al Emitter y actualizar la función de "contratación" (addParticle()) para decirle: "ahora tienes un 33% de probabilidad de crear estrellas".
+
+NO tendría que modificar: No tocarías en absoluto la clase padre Particle (el motor base), ni tampoco el ciclo principal del emisor (run()) que las actualiza y elimina. La estructura y la física base quedan intactas.
+
+4. Lógica del Emitter y de Muerte: ¡Siguen siendo exactamente las mismas! El proceso de recorrer la lista hacia atrás y eliminar a los que ya no tienen energía (isDead()) no cambió en nada.
+
+Capas:
+
+La capa de Estructura se modificó solo un poquito (el addParticle ahora tira una moneda al aire para decidir qué tipo de partícula crea).
+
+La capa de Visualización fue la que realmente se amplió al crear la clase Confetti.
+
+La capa de Comportamiento (la física y el ciclo de vida base) permaneció totalmente intacta.
 
 #### Acividad 4
 
 #### Enunciado
 
+📤 Bitácora
+
+Fuerzas globales vs. locales:
+
+En Example 4.6, ¿Dónde se define la gravedad? ¿Quién la aplica a las partículas? ¿Es una fuerza global o local?
+En Example 4.7, ¿Qué diferencia hay entre la gravedad y la fuerza del repeller? ¿Dónde “vive” cada una?
+La fuerza del repeller depende de la distancia entre la partícula y el repeller. ¿Qué principio físico se está modelando?
+¿Cambió la clase Particle entre Example 4.6 y 4.7? ¿Qué implica esto sobre la separación entre comportamiento de la partícula y fuerzas externas?
+Tabla comparativa:
+
+Completa la siguiente tabla en tu bitácora:
+
+Aspecto	4.2	4.4	4.5	4.6	4.7
+¿Quién crea partículas?					
+¿Hay clase Emitter?					
+¿Hay herencia?					
+¿Hay fuerzas externas?					
+¿Hay interacción entre elementos?					
+¿Cómo mueren las partículas?					
+Modificación quirúrgica:
+
+Elige UNA de estas modificaciones sobre el Example 4.7 e impleméntala:
+
+(a) Cambiar la visualización sin cambiar fuerzas ni estructura.
+(b) Cambiar las fuerzas sin cambiar la estructura ni la visualización.
+(c) Cambiar la condición de muerte sin cambiar la visualización ni las fuerzas.
+Para la modificación que elegiste, responde:
+
+¿Qué líneas de código tocaste?
+¿Qué clases/funciones modificaste?
+¿Qué partes del programa NO necesitaste modificar?
+¿Por qué fue posible hacer este cambio sin afectar las demás capas?
+
 ##  Solución
 
+1. La gravedad se define en el archivo principal, el sketch.js (let gravity = createVector(0, 0.1)). Quien se encarga de aplicarla es el jefe de la fábrica, el Emitter, a través de su método applyForce. Es una fuerza global porque es como el clima o el viento en una ciudad: afecta a todos los ciudadanos (partículas) exactamente por igual, sin importar dónde estén parados.
+
+2. La gravedad sigue siendo "el clima" que afecta a todos por igual y vive en el archivo principal (sketch.js). La fuerza del repulsor, en cambio, vive dentro de un objeto específico (la clase Repeller). Es una fuerza local o relativa, porque es como un imán gigante en medio de la calle: su fuerza depende de qué tan cerca o lejos esté cada partícula de ese imán.
+
+3. Se está modelando la atracción gravitacional (como los planetas) o el electromagnetismo (como los imanes). El principio clave es que la fuerza es inversamente proporcional al cuadrado de la distancia. Mientras más cerca estás, el empujón es muchísimo más fuerte; si te alejas un poco, la fuerza cae drásticamente. Por eso divide por distance * distance.
+
+4. ¡No cambió casi nada en su estructura fundamental! A la partícula no le importa si la empuja el viento global o un imán local; ella solo tiene una boca (applyForce) por la que recibe un empujón (un vector) y se lo suma a su motor (acceleration). Esto demuestra una separación perfecta: el comportamiento interno de la partícula es independiente de lo que pase en el mundo exterior.
+
+5. <img width="2816" height="1536" alt="Gemini_Generated_Image_w2o2thw2o2thw2o2" src="https://github.com/user-attachments/assets/c179b157-69f5-4ba4-ab9f-d72dd001e376" />
+
+6. Toqué las instrucciones de dibujo (stroke, fill, circle) y las reemplacé por líneas o formas distintas, y le di un color diferente.
+
+7. Modifiqué únicamente la función show() dentro de la clase Particle (en el archivo particle.js).
+
+8. No toqué el sketch.js (el jefe), ni el emitter.js (el gerente de contratación), ni el repeller.js (el imán). Tampoco toqué la función update() o applyForce() dentro de la misma partícula. La estructura y las físicas quedaron intactas.
+
+9. Porque el código está modularizado (encapsulado). El gerente de la fábrica (el Emitter) solo le dice a la partícula "es tu turno de actuar" (llamando a run()). Al gerente no le importa si la partícula se dibujó como un círculo o como un cuadrado rojizo; la visualización es un problema exclusivo del departamento de "maquillaje" (el método show()).
 
 ## Bitácora de aplicación 
 
