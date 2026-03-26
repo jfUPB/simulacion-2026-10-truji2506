@@ -418,4 +418,25 @@ Piensa en tu pieza del Apply: si la quisieras recrear en Unity (o TouchDesigner,
 
 ##  Solución
 
+1. Una partícula es una entidad con estado: Significa que no es solo un dibujo estático. Es un objeto que guarda información sobre sí mismo en un momento dado (su posición actual, su velocidad, cuánta "vida" le queda).
+
+2. Una partícula tiene ciclo de vida: Todo elemento en el sistema nace, se actualiza frame a frame (se mueve o cambia) y eventualmente muere o desaparece cuando cumple una condición (como llegar a 0 en su lifespan).
+
+3. Un sistema de partículas gestiona colecciones dinámicas de elementos: No trabajas con un número fijo de objetos. El sistema maneja una lista (como un array) que constantemente está creciendo cuando nacen partículas y encogiéndose cuando mueren.
+
+4. La creación y eliminación no es un detalle técnico, es central: Si no eliminas las partículas muertas (como hicimos con el splice()), la memoria de la computadora colapsa rápidamente. El flujo constante de "crear y destruir" es lo que le da la ilusión de fluidez continua.
+
+5. Separación entre la lógica individual y la del sistema:
+La partícula solo sabe moverse a sí misma. No le importa cuántas otras partículas hay. El sistema (o emisor) es el "jefe" que se encarga de recorrer la lista y decirle a cada una: "actualízate" o "muérete".
+
+6. Un emisor es una abstracción importante: El emisor define el origen. Es el punto en el espacio que dicta cómo, dónde y a qué ritmo nacen las partículas, independientemente de cómo se comporten después de nacer.
+
+7. Pueden existir sistemas de sistemas: Puedes tener un emisor que, en lugar de disparar partículas simples, dispare otros emisores. Es el principio de los fuegos artificiales: un cohete sube (partícula) y al explotar se convierte en un emisor de chispas.
+
+8. Heterogeneidad usando herencia y polimorfismo: En un mismo sistema puedes tener objetos distintos conviviendo. Gracias a la programación orientada a objetos, tienes una plantilla base (Particle) y variaciones (ProtoStar, CelestialBody) que comparten las mismas físicas pero tienen comportamientos y aspectos únicos.
+
+9. Las partículas responden a fuerzas globales y locales: Una fuerza global afecta a todas por igual en todo el lienzo (como tu gravedad). Una fuerza local varía dependiendo de dónde esté la partícula en ese momento exacto (como el ruido Perlin de tu código).
+
+10. La representación visual varía, el principio algorítmico no: Las matemáticas subyacentes (sumar aceleración a velocidad, y velocidad a posición) son universales. La física funciona igual si dibujas un círculo blanco 2D o si renderizas un modelo 3D con texturas realistas.
+
 
