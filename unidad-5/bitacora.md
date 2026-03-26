@@ -199,7 +199,8 @@ Esta pieza representa el ciclo de vida natural de una estrella: desde su nacimie
 
 #### Mapa de decisiones
 
-1. <img width="2816" height="1536" alt="Gemini_Generated_Image_dpeprldpeprldpep" src="https://github.com/user-attachments/assets/1147a429-2f9d-48fa-afc7-d03df2f34f1c" />
+1. <img width="2816" height="1536" alt="Gemini_Generated_Image_roj7w9roj7w9roj7" src="https://github.com/user-attachments/assets/e4136e92-d9a3-4194-8e69-3cf7af1e7798" />
+
 
 #### Implementación 
 
