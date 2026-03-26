@@ -210,7 +210,8 @@ https://editor.p5js.org/truji2506/sketches/L4z5OMU38
 #### Codigo
 
 ````c
-// SIMBIOSIS: PULSO HUMANO Y ALGORITMO (Con Muerte Enfática)
+// POLVO CÓSMICO Y SUPERNOVA: EL CICLO DE UNA ESTRELLA
+// Concepto: El viaje desde el nacimiento en una nebulosa hasta el colapso violento.
 
 let emitter;
 let zoff = 0; 
@@ -222,19 +223,20 @@ function setup() {
 }
 
 function draw() {
-  // Rastro oscuro para acumular las líneas suavemente
+  // Fondo cósmico: Rastro oscuro para acumular la luz estelar en el tiempo
   push();
   fill(0, 15); 
   noStroke();
   rect(0, 0, width, height);
   pop();
 
-  // INTERACCIÓN HUMANA
+  // COLAPSO GRAVITACIONAL (Interacción del usuario)
+  // Al presionar, la fuerza creadora condensa el polvo estelar
   if (mouseIsPressed) {
-    emitter.addHumanSeed(mouseX, mouseY);
+    emitter.addProtoStar(mouseX, mouseY);
   }
 
-  // Fuerza de gravedad suave
+  // Atracción gravitacional sutil de galaxias lejanas
   let gravity = createVector(0, 0.05);
   emitter.applyForce(gravity);
 
@@ -243,7 +245,7 @@ function draw() {
   zoff += 0.01; 
 }
 
-// --- CLASE PADRE ---
+// --- CLASE PADRE: MATERIA ESTELAR ---
 class Particle {
   constructor(x, y) {
     this.position = createVector(x, y);
@@ -267,10 +269,11 @@ class Particle {
   }
 }
 
-// --- HIJO 1: LA SEMILLA HUMANA ---
-class HumanSeed extends Particle {
+// --- HIJO 1: LA PROTOESTRELLA (El núcleo de ignición) ---
+class ProtoStar extends Particle {
   constructor(x, y) {
     super(x, y);
+    // Vida muy corta: es solo el estallido inicial de energía
     this.lifespan = 50; 
   }
 
@@ -278,30 +281,32 @@ class HumanSeed extends Particle {
     super.update();
     this.lifespan -= 5; 
     
-    // Engendra agentes mecánicos
+    // El núcleo alcanza la temperatura crítica y engendra la estrella principal
     if (random(1) < 0.6) { 
-      emitter.addMachineAgent(this.position.x, this.position.y);
+      emitter.addCelestialBody(this.position.x, this.position.y);
     }
   }
 
   show() {
+    // Brillo inicial blanco y puro del núcleo
     noStroke();
     fill(255, this.lifespan);
     circle(this.position.x, this.position.y, 3);
   }
 }
 
-// --- HIJO 2: EL AGENTE MÁQUINA (Con Muerte Modificada) ---
-class MachineAgent extends Particle {
+// --- HIJO 2: EL CUERPO CELESTE (Estrella errante y Supernova) ---
+class CelestialBody extends Particle {
   constructor(x, y) {
     super(x, y);
     this.velocity = p5.Vector.random2D().mult(random(1, 3));
     this.prevPos = this.position.copy(); 
-    // Reducimos la vida a 150 para que la muerte ocurra rápido mientras mantienes el clic
+    // Vida media de la estrella viajando por el cosmos
     this.lifespan = 150; 
   }
 
   update() {
+    // Vientos solares y corrientes espaciales invisibles (Ruido Perlin)
     let angle = noise(this.position.x * 0.005, this.position.y * 0.005, zoff) * TWO_PI * 4;
     let flowForce = p5.Vector.fromAngle(angle);
     flowForce.mult(0.1); 
@@ -313,40 +318,40 @@ class MachineAgent extends Particle {
     super.update(); 
     
     this.velocity.limit(2); 
-    this.lifespan -= 1.5; // Envejece más rápido
+    this.lifespan -= 1.5; // La estrella consume su combustible
   }
 
   show() {
-    // CONDICIÓN DE MUERTE VISUAL (Cumpliendo la rúbrica)
+    // CONDICIÓN DE MUERTE VISUAL: EL CICLO DE LA ESTRELLA
     if (this.lifespan > 15) {
-      // Fase de vida: Asimilación (línea blanca suave)
+      // Fase de secuencia principal: Luz viajando por el espacio (estela blanca y suave)
       stroke(255, 15); 
       strokeWeight(1);
       line(this.prevPos.x, this.prevPos.y, this.position.x, this.position.y);
     } else {
-      // Fase de muerte: El "Corto Circuito" (últimos 15 frames de vida)
-      // La partícula tiembla y se vuelve roja antes de ser eliminada del array
-      stroke(255, 50, 50, 200); // Rojo brillante glitch
-      strokeWeight(random(2, 4)); // Grosor errático
+      // Fase de muerte: La "Supernova" (últimos 15 frames de vida)
+      // La estrella agota su energía, se vuelve inestable, se expande y colapsa
+      stroke(255, 50, 50, 200); // Rojo gigante inestable
+      strokeWeight(random(2, 4)); // Expansión errática de la materia
       
-      // Le sumamos un random() a la posición solo en el dibujo para que parezca que vibra o falla
+      // Vibración violenta del núcleo antes de la explosión final
       point(this.position.x + random(-3, 3), this.position.y + random(-3, 3));
     }
   }
 }
 
-// --- EL SISTEMA GESTOR ---
+// --- EL SISTEMA GESTOR: EL COSMOS ---
 class Emitter {
   constructor() {
     this.particles = [];
   }
 
-  addHumanSeed(x, y) {
-    this.particles.push(new HumanSeed(x, y));
+  addProtoStar(x, y) {
+    this.particles.push(new ProtoStar(x, y));
   }
 
-  addMachineAgent(x, y) {
-    this.particles.push(new MachineAgent(x, y));
+  addCelestialBody(x, y) {
+    this.particles.push(new CelestialBody(x, y));
   }
 
   applyForce(force) {
@@ -361,6 +366,7 @@ class Emitter {
       p.update();
       p.show();
 
+      // La materia de la estrella destruida desaparece del universo visible
       if (p.isDead()) {
         this.particles.splice(i, 1);
       }
@@ -389,4 +395,26 @@ function windowResized() {
 
 #### Enunciado
 
+📤 Bitácora
+
+Parte 1 — Principios fundamentales
+
+Describe con tus propias palabras cada uno de estos 10 principios:
+
+Una partícula es una entidad con estado.
+Una partícula tiene ciclo de vida.
+Un sistema de partículas gestiona colecciones dinámicas de elementos.
+La creación y eliminación de partículas no es un detalle técnico menor, sino parte central del modelo.
+Debe haber separación entre la lógica de una partícula individual y la lógica del sistema/emisor.
+Un emisor o particle system es una abstracción importante.
+Pueden existir sistemas de sistemas.
+Puede haber heterogeneidad usando herencia y polimorfismo.
+Las partículas pueden responder a fuerzas globales y locales.
+La representación visual puede variar sin cambiar el principio algorítmico de fondo.
+Parte 2 — Transferencia a otra herramienta
+
+Piensa en tu pieza del Apply: si la quisieras recrear en Unity (o TouchDesigner, o Blender), ¿Qué se mantendría igual y qué cambiaría? ¿Qué partes de tu diseño son independientes de la herramienta?
+
 ##  Solución
+
+
