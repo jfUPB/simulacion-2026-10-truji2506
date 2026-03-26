@@ -418,6 +418,8 @@ Piensa en tu pieza del Apply: si la quisieras recrear en Unity (o TouchDesigner,
 
 ##  Solución
 
+##  Parte 1 
+
 1. Una partícula es una entidad con estado: Significa que no es solo un dibujo estático. Es un objeto que guarda información sobre sí mismo en un momento dado (su posición actual, su velocidad, cuánta "vida" le queda).
 
 2. Una partícula tiene ciclo de vida: Todo elemento en el sistema nace, se actualiza frame a frame (se mueve o cambia) y eventualmente muere o desaparece cuando cumple una condición (como llegar a 0 en su lifespan).
@@ -439,4 +441,7 @@ La partícula solo sabe moverse a sí misma. No le importa cuántas otras partí
 
 10. La representación visual varía, el principio algorítmico no: Las matemáticas subyacentes (sumar aceleración a velocidad, y velocidad a posición) son universales. La física funciona igual si dibujas un círculo blanco 2D o si renderizas un modelo 3D con texturas realistas.
 
+##  Parte 2 
+
+Tomando como base de la pieza del ciclo estelar, y pensando en un entorno como TouchDesigner, usaria componentes de partículas nativos o simulaciones basadas en texturas y shaders. lo que me permite manejar muchas estrellas al mismo tiempo sin perdida de rendimiento, aprovechando el procesamiento visual en tiempo real 
 
