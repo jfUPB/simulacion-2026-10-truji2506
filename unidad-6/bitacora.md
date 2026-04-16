@@ -325,13 +325,11 @@ function initialText() {
 
   let pulso = sin(millis() / 400.0); 
   let alphaPulso = map(pulso, -1, 1, 80, 255);
-  let flotacionY = map(pulso, -1, 1, -5, 5); 
+  let flotacionY = map(pulso, -1, 1, -5, 5);
 
-  // Efecto de "Glow" (Dibujamos un texto difuminado detrás)
   fill(255, 255, 255, alphaPulso * 0.15);
   text("Haz clic para sumergirte", width / 2, (height * 0.92) + flotacionY + 2);
 
-  // Texto principal
   fill(255, 255, 255, alphaPulso);
   text("Haz clic para sumergirte", width / 2, (height * 0.92) + flotacionY);
   textStyle(NORMAL); 
@@ -422,8 +420,6 @@ class Particle {
     this.acc = createVector(0, 0);
     this.baseMaxSpeed = random(1.5, 3);
     this.colorIndex = floor(random(5));
-    
-    // Historial para el efecto metabólico
     this.history = []; 
     this.maxHistory = floor(random(10, 35)); 
   }
