@@ -186,6 +186,8 @@ Ajustar principios de diseño editorial en la pantalla de inicio mediante jerarq
 
 #### 10. Código fuente.
 
+sketch.js
+
 ```c
 let audio;
 let fft;
@@ -510,6 +512,34 @@ class Particle {
 }
 ````
 
+index.html
+````
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ascend - Olas de Innerbloom</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.min.js"></script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #abcf95; /* Fondo oscuro */
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <script src="sketch.js"></script>
+</body>
+</html>
+````
 #### 11. Enlace al sketch.
 
 No lo tengo ya que lo elabore en Visual, por que en P5.js no podia subir la melodia por el tamaño del archivo.
