@@ -199,8 +199,7 @@ let firstFrame = false;
 let speedMultiplier = 1.0; 
 let darkPalette = ['#121b1e', '#2a4445', '#58bda2', '#212121', '#0a0a0a'];
 let pastelPalette = ['#f1948a', '#ffdfba', '#e8e8df', '#baffc9', '#bae1ff'];
-
-let stateAmt = 0; // Para el lerpColor (0 = Oscuro, 1 = Pastel)
+let stateAmt = 0; 
 let targetStateAmt = 0; 
 let climaxTime = 362; 
 let climaxTriggered = false; 
@@ -215,12 +214,9 @@ function setup() {
   frameRate(60);
   background(10);
 
-  // Usamos FFT para aislar los bajos (El "respiro")
   fft = new p5.FFT(0.8, 64);
   
   initializeFlowField();
-  
-  // Instanciar los agentes metabólicos
   for (let i = 0; i < 500; i++) {
     particles.push(new Particle());
   }
@@ -236,7 +232,7 @@ function draw() {
     background(10);
     textAlign(CENTER, CENTER);
     textSize(48);
-    fill(127, 222, 197); // Tono menta
+    fill(127, 222, 197);
     text("CARGANDO AUDIO...", width / 2, height / 2);
     return;
   }
