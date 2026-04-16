@@ -51,7 +51,79 @@ Además, responde:
 
 ##  Solución
 
+#### Acividad 4
+
+#### Enunciado
+
+Explica con tus palabras las tres reglas básicas:
+separación,
+alineación,
+cohesión.
+Identifica qué parámetros controlan estas reglas.
+Modifica uno o más pesos del sistema y describe el efecto visual y colectivo.
+Describe el comportamiento emergente observado:
+compacto,
+disperso,
+estable,
+nervioso,
+caótico,
+fluido.
+Además, responde:
+
+¿Qué atmósfera visual produce el flocking?
+¿En qué tipo de relación con una canción podría funcionar mejor este algoritmo?
+
+##  Solución
+
+#### Acividad 5
+
+#### Enunciado
+
+Explica con tus palabras las tres reglas básicas:
+separación,
+alineación,
+cohesión.
+Identifica qué parámetros controlan estas reglas.
+Modifica uno o más pesos del sistema y describe el efecto visual y colectivo.
+Describe el comportamiento emergente observado:
+compacto,
+disperso,
+estable,
+nervioso,
+caótico,
+fluido.
+Además, responde:
+
+¿Qué atmósfera visual produce el flocking?
+¿En qué tipo de relación con una canción podría funcionar mejor este algoritmo?
+
+##  Solución
+
+
 ## Bitácora de aplicación 
+
+#### Acividad 6
+
+#### Enunciado
+
+Documenta el proceso completo:
+
+Concepto visual.
+Relación entre la visual y la canción.
+Moodboard o referencias.
+Dos o más bocetos.
+Mapa de decisiones.
+Mapa de interpretación.
+Justificación del algoritmo elegido.
+Explicación de la relación audio-visual.
+Evidencia del uso de IA.
+Código fuente.
+Enlace al sketch.
+Capturas o registros de momentos importantes de la pieza.
+
+
+##  Solución
+
 
 
 ## Bitácora de reflexión
