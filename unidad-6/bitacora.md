@@ -291,11 +291,11 @@ function initialText() {
   let initHeight = height * 0.35; 
   let interline = 55;
 
-  let c1 = color(88, 110, 110);  // Gris/Menta muy desaturado (Profundidad)
-  let c2 = color(127, 222, 197); // Cian claro (Transición)
-  let c3 = color(241, 148, 138); // Coral suave (Superficie luminosa)
+  let c1 = color(88, 110, 110);  
+  let c2 = color(127, 222, 197); 
+  let c3 = color(241, 148, 138); 
 
-  textFont('Georgia'); // Cambiamos a fuente Serif
+  textFont('Georgia'); 
   textStyle(NORMAL);
 
   textSize(30);
