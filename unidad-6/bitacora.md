@@ -302,7 +302,7 @@ function initialText() {
   fill(c1);
   text("Nueve minutos de simbiosis sonora,", width / 2, initHeight - interline);
 
-  textSize(36); // La letra crece ligeramente
+  textSize(36); 
   fill(c2);
   text("donde la materia oscura respira y muta,", width / 2, initHeight);
 
@@ -319,7 +319,7 @@ function initialText() {
   text("— CONTROLES DEL INSTRUMENTO —", width / 2, controlY - 30);
   text("[1] Modo Oscuro  |  [2] Células Pastel  |  [F] Pantalla Completa", width / 2, controlY);
   text("[↑ / ↓] Velocidad de Corriente  |  [Mouse Drag] Perturbar", width / 2, controlY + 30);
-  textFont('Helvetica'); // Fuente moderna y limpia
+  textFont('Helvetica');
   textSize(28);
   textStyle(BOLD);
 
