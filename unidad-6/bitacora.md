@@ -516,6 +516,13 @@ No lo tengo ya que lo elabore en Visual, por que en P5.js no podia subir la melo
 
 #### 12. Capturas o registros de momentos importantes de la pieza.
 
+<img width="1910" height="850" alt="Momento 1 " src="https://github.com/user-attachments/assets/9525e195-faa6-4fa4-8d1c-22ecd19bdc0d" />
+
+<img width="1908" height="852" alt="image" src="https://github.com/user-attachments/assets/9ce57375-e0f1-4bf0-86ec-cd676745b601" />
+
+<img width="1913" height="852" alt="image" src="https://github.com/user-attachments/assets/9e9bc5c5-c17e-4e8d-93eb-b7c901752567" />
+
+
 
 
 ## Bitácora de reflexión
