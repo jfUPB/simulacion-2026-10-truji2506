@@ -124,6 +124,29 @@ Capturas o registros de momentos importantes de la pieza.
 
 ##  Solución
 
+#### 1. Concepto visual.
+
+Visualmente, Ascend es como mirar un océano vivo a través de un microscopio. El concepto central es un viaje de nueve minutos, exactamente lo que dura la canción.
+
+Empezamos en lo más profundo del mar, en un ambiente oscuro y pesado. Pero a medida que la música avanza, vamos 'ascendiendo'. Lo que ven en pantalla no son simples puntos de código, sino formas que actúan como células vivas: respiran, se agrupan y mutan con los bajos del audio, hasta que al final rompemos la superficie en una explosión de colores luminosos y cálidos.
+
+#### 2. Relación entre la visual y la canción.
+
+Para integrar la música, mi objetivo era que el programa sintiera la curva narrativa de la canción. Dividí la experiencia visual en dos momentos: Tensión y Liberación.
+
+Durante la fase de Tensión, la energía de los bajos altera directamente las matemáticas del código, haciendo que las células se muevan más rápido y brillen más. Pero para la fase de Liberación, programé un evento exacto. En el minuto 6:02, que es el 'drop' de la pista, el algoritmo inyecta una fuerza caótica que destruye el orden de la corriente y cambia instantáneamente la paleta de colores. El código acompaña el viaje emocional de la música de principio a fin.
+
+#### 3. Moodboard o referencias.
+#### 4. Dos o más bocetos.
+#### 5. Mapa de decisiones.
+#### 6. Mapa de interpretación.
+#### 7. Justificación del algoritmo elegido.
+#### 8. Explicación de la relación audio-visual.
+#### 9. Evidencia del uso de IA.
+#### 10. Código fuente.
+#### 11. Enlace al sketch.
+#### 12. Capturas o registros de momentos importantes de la pieza.
+
 
 
 ## Bitácora de reflexión
