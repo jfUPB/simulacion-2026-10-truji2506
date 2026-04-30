@@ -106,6 +106,12 @@ La pieza busca revelar la verdad material detrás de la fachada corporativa: la 
 
 Comportamental: La transición de sólido a energía (fuego) y luego a residuo (ceniza) se logra pasando de un renderizado estático a un sistema dinámico de Agentes Autónomos. Las partículas de fuego se comportan con turbulencia termodinámica (Perlin Noise), mientras que la ceniza se comporta bajo la inercia y el peso, buscando su forma inerte mediante fuerzas de dirección (Steering behaviors: Arrive).
 
+6. <img width="1772" height="592" alt="Gemini_Generated_Image_tsufsgtsufsgtsuf" src="https://github.com/user-attachments/assets/7cdf57cc-b7bb-48e3-b6a8-284ee14b715e" />
+
+
+7. <img width="1408" height="768" alt="Gemini_Generated_Image_cgdozcgdozcgdozc" src="https://github.com/user-attachments/assets/28df81c1-ce85-4b22-8aeb-49ac0468eda2" />
+
+
 8. El audio en esta pieza no es un simple ecualizador decorativo ("que el fuego baile con la música"). Actúa como un gatillo narrativo.
 El volumen continuo (mic.getLevel()) es leído por el sistema en segundo plano, pero solo cobra vida semántica cuando el usuario realiza un soplido intencional que supera el límite de ignición. Este pico de audio detona un cambio de estado en la máquina de estados: anula la variable ardiendo, cambia el mapeo de color a grises e inyecta una explosión vectorial que simboliza la dispersión de la ceniza por el viento, cortando el sonido pregrabado del fuego bruscamente.
 
