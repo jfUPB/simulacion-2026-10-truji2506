@@ -381,4 +381,22 @@ Index.html
 </html>
 ```
 
+11. 
+
+https://editor.p5js.org/truji2506/sketches/b2hFhDDGF
+
+12.
+
+Fase 1 
+<img width="1632" height="695" alt="image" src="https://github.com/user-attachments/assets/5223247c-1cf7-498f-bacc-639db5e9fa7c" />
+
+Fase 2 
+<img width="1626" height="690" alt="image" src="https://github.com/user-attachments/assets/fa9e5e44-bb32-4d74-9760-d01c936914ed" />
+
+Fase 3 
+<img width="1283" height="518" alt="image" src="https://github.com/user-attachments/assets/286aa870-630d-4014-9b5a-c425f38018b9" />
+
+
+
+
 ## Bitácora de reflexión
