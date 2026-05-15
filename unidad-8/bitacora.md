@@ -1,3 +1,5 @@
+No reportó el trabajo en la bitácora
+
 # Unidad 8
 
 ## Bitácora de proceso de aprendizaje
